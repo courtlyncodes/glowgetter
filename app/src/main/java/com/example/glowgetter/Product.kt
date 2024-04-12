@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Makeup (
+data class Product (
     val id: Int,
     val brand: String,
     val name: String,
@@ -16,23 +16,20 @@ data class Makeup (
 ////    val currency: Any? = null,
 
     @SerialName("image_link")
-    val imageLink: String,
+    val image: String,
 
-    @SerialName("product_link")
-    val productLink: String,
+//    @SerialName("product_link")
+//    val productLink: String,
 
 //    @SerialName("website_link")
 //    val websiteLink: String,
 
     val description: String,
-    val rating: Long,
+    val rating: Double,
     val category: String,
 
     @SerialName("product_type")
     val productType: String,
-
-    @SerialName( "created_at")
-    val createdAt: String,
 
 //    @SerialName( "api_featured_image")
 //    val apiFeaturedImage: String,

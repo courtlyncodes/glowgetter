@@ -68,9 +68,11 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.okhttp)
     // Coil
-    implementation(libs.coil)
+    implementation(libs.coil.compose)
     // Kotlin Serializer
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.constraintlayout)
 
 
     testImplementation(libs.junit)
