@@ -8,7 +8,7 @@ data class Product (
     val id: Int,
     val brand: String,
     val name: String,
-    val price: String,
+    val price: String?,
 
 //    @SerialName("price_sign")
 ////    val priceSign: Any? = null,
@@ -37,4 +37,3 @@ data class Product (
     @SerialName( "product_colors")
     val productColors: List<String>?
 )
-

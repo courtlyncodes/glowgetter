@@ -73,6 +73,11 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.material3.adaptive.navigation.suite.android)
+    implementation(libs.androidx.adaptive.navigation.android)
+    implementation(libs.androidx.adaptive)
+    implementation(libs.androidx.adaptive.layout)
+    implementation(libs.androidx.adaptive.navigation)
 
 
     testImplementation(libs.junit)

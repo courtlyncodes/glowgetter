@@ -1,4 +1,5 @@
 [versions]
+adaptive = "1.0.0-alpha10"
 agp = "8.4.0-rc02"
 coil = "2.6.0"
 converterScalars = "2.9.0"
@@ -18,8 +19,13 @@ material3Android = "1.2.1"
 uiTextGoogleFonts = "1.6.5"
 material3Desktop = "1.2.1"
 constraintlayout = "2.1.4"
+material3AdaptiveNavigationSuiteAndroid = "1.0.0-alpha05"
+adaptiveNavigationAndroid = "1.0.0-alpha10"
 
 [libraries]
+androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
+androidx-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "adaptive" }
+androidx-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "adaptive" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts", version.ref = "uiTextGoogleFonts" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
@@ -45,6 +51,8 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 androidx-material3-desktop = { group = "androidx.compose.material3", name = "material3-desktop", version.ref = "material3Desktop" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-material3-adaptive-navigation-suite-android = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
+androidx-adaptive-navigation-android = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation-android", version.ref = "adaptiveNavigationAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

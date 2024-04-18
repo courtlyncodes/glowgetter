@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Glow Getter</string>
     <string name="tagline">Find Your Perfect Match</string>
+    <string name="eyes">Eyes</string>
+    <string name="face">Face</string>
+    <string name="lips">Lips</string>
+    <string name="home">home</string>
+    <string name="categories">categories</string>
+    <string name="favorites">favorites</string>
+    <string name="guides">guides</string>
+    <string name="find">Find</string>
+    <string name="your_glow">Your Glow</string>
 </resources>
