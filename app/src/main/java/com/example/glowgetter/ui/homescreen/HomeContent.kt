@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
@@ -55,6 +56,7 @@ import com.example.glowgetter.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.serialization.SerialName
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
@@ -64,11 +66,6 @@ fun ListDetailScreen(
 ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
 
-//    Scaffold(
-//        topBar = {
-//            GgTopAppBar()
-//        }
-//    ) { innerPadding ->
     ListDetailPaneScaffold(
         directive = navigator.scaffoldDirective,
         value = navigator.scaffoldValue,
@@ -77,10 +74,8 @@ fun ListDetailScreen(
         },
         detailPane = {
             MakeupListPane(productList = ProductDataProvider.products)
-        },
-//            modifier = modifier.padding(innerPadding)
+        }
     )
-//    }
 }
 
 
@@ -113,22 +108,23 @@ fun ProductCarousel(
         R.mipmap.eyeshadow,
         R.mipmap.foundation
     )
-    val pagerState = rememberPagerState(pageCount = { photos.size })
-    // infinitely loop through images every 2 seconds while app is live
+    val pageCount = photos.size
+    val pagerState = rememberPagerState(initialPage = 0, pageCount = { 250 })
+
+// infinitely loop through images every 2 seconds while app is live
     LaunchedEffect(autoScrollEnabled, autoScrollInterval) {
         if (autoScrollEnabled) {
-            while (true) {
-                delay(autoScrollInterval.toLong())
-                pagerState.animateScrollToPage((pagerState.currentPage + 1) % pagerState.pageCount)
+                while (true) {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
             }
-        }
-    }
-
+            }
     HorizontalPager(
         contentPadding = PaddingValues(horizontal = 16.dp),
         pageSpacing = 16.dp,
-        state = pagerState
-    ) { page ->
+        state = pagerState,
+    ) { index ->
+        val page =  index % pageCount
         Image(
             painter = painterResource(photos[page]),
             contentDescription = photos[page].toString()
@@ -153,7 +149,6 @@ fun HomePaneMakeupProductsList(
             ProductItem(product = product)
         }
     }
-
 }
 
 //this should go in another file
