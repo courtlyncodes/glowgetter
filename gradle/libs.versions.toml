@@ -22,6 +22,8 @@ constraintlayout = "2.1.4"
 material3AdaptiveNavigationSuiteAndroid = "1.0.0-alpha05"
 adaptiveNavigationAndroid = "1.0.0-alpha10"
 lifecycleViewmodelCompose = "2.7.0"
+navigationRuntimeKtx = "2.7.7"
+navigationCompose = "2.7.7"
 
 [libraries]
 androidx-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "adaptive" }
@@ -55,6 +57,8 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-material3-adaptive-navigation-suite-android = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3AdaptiveNavigationSuiteAndroid" }
 androidx-adaptive-navigation-android = { group = "androidx.compose.material3.adaptive", name = "adaptive-navigation-android", version.ref = "adaptiveNavigationAndroid" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewmodelCompose" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version.ref = "navigationRuntimeKtx" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

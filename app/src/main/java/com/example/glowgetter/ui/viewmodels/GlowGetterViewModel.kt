@@ -28,7 +28,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     val productUiState: StateFlow<ProductUiState> = _productUiState.asStateFlow()
 
     private var brandQuery: String? = null
-    private var typeQuery: String = "eyes"
+    private var typeQuery: String = "eyeshadow"
 
     init {
         getProductListByBrand()
@@ -68,7 +68,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         viewModelScope.launch {
             productListUiState = ProductListUiState.Loading
             productListUiState = try {
-                val productList = glowGetterRepository.getProductsByType(type)
+                val productList = glowGetterRepository.getProductsByType("eyeshadowi")
                 if (productList == null) {
                     ProductListUiState.Error
                 } else {

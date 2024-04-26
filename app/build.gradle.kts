@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.androidx.adaptive.layout)
     implementation(libs.androidx.adaptive.navigation)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
 
 
     testImplementation(libs.junit)

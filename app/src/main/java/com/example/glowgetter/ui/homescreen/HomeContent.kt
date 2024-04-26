@@ -83,7 +83,7 @@ fun ProductCarousel(
 ) {
     val photos = listOf(
         R.mipmap.lipstick,
-        R.mipmap.eyeshadow_product,
+        R.mipmap.eyeshadow,
         R.mipmap.foundation
     )
     val pageCount = photos.size

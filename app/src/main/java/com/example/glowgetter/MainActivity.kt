@@ -15,6 +15,7 @@ import com.example.glowgetter.ui.productlist.DetailPane
 import com.example.glowgetter.ui.productlist.ListDetailScreen
 import com.example.glowgetter.ui.theme.GlowGetterTheme
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
+import com.example.glowgetter.ui.welcomescreen.WelcomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +27,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-                    ListDetailScreen(onButtonClick = { /*TODO*/ })
+                  WelcomeScreen()
                 }
             }
         }
