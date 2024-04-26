@@ -8,21 +8,13 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowColumn
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridItemInfo
-import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -34,11 +26,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
-import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
-import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -62,38 +51,24 @@ import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
 import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
-@Composable
-fun ListDetailScreen(
-    modifier: Modifier = Modifier
-) {
-    val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
 
-    ListDetailPaneScaffold(
-        directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
-        listPane = {
-            HomeScreen()
-        },
-        detailPane = {
-            MakeupListPane(productList = ProductDataProvider.products)
-        }
-    )
-}
 
 
 @Composable
 fun ProductCategories(
+    onEyesClick: () -> Unit,
+    onFaceClick: () -> Unit,
+    onLipsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        Card(modifier = modifier.clickable {}) {
+        Card(modifier = modifier.clickable { onEyesClick() }) {
             Text(text = stringResource(R.string.eyes))
         }
-        Card(modifier = modifier.clickable {}) {
+        Card(modifier = modifier.clickable { onFaceClick() }) {
             Text(text = stringResource(R.string.face))
         }
-        Card(modifier = modifier.clickable {}) {
+        Card(modifier = modifier.clickable { onLipsClick() }) {
             Text(text = stringResource(R.string.lips))
         }
     }
@@ -108,7 +83,7 @@ fun ProductCarousel(
 ) {
     val photos = listOf(
         R.mipmap.lipstick,
-        R.mipmap.eyeshadow,
+        R.mipmap.eyeshadow_product,
         R.mipmap.foundation
     )
     val pageCount = photos.size
@@ -145,25 +120,6 @@ fun HomePaneMakeupProductsList(
     val productList = ProductDataProvider.products
 
 
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(157.dp),
-        state = rememberLazyGridState(),
-        modifier = modifier.padding(horizontal = 4.dp),
-        contentPadding = contentPadding,
-    ) {
-        items(items = productList) { product ->
-            ProductItem(product = product)
-        }
-    }
-}
-
-//this should go in another file
-@Composable
-fun MakeupListPane(
-    productList: List<Product>,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
     LazyVerticalGrid(
         columns = GridCells.Adaptive(157.dp),
         state = rememberLazyGridState(),
@@ -243,6 +199,9 @@ fun GgTopAppBar(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
+    onEyesClick: () -> Unit,
+    onFaceClick: () -> Unit,
+    onLipsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val products1 = ProductDataProvider.products.subList(0, 2)
@@ -251,52 +210,61 @@ fun HomeScreen(
     val products4 = ProductDataProvider.products.subList(6, 8)
     val products5 = ProductDataProvider.products.subList(8, 10)
 
+    Scaffold(
+        topBar = {
+            GgTopAppBar(onSearch = { "search me" })
+        }
+    ) {
+        Column(modifier = Modifier
+            .padding(it)
+            .verticalScroll(rememberScrollState())) {
 
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        GgTopAppBar(onSearch = { "search me" })
-        ProductCategories()
-        ProductCarousel()
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            products1.forEach { product ->
-                ProductItem(product = product)
+            ProductCategories(onEyesClick, onFaceClick, onLipsClick)
+            ProductCarousel()
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                products1.forEach { product ->
+                    ProductItem(product = product)
+                }
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            products2.forEach { product ->
-                ProductItem(product = product)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                products2.forEach { product ->
+                    ProductItem(product = product)
+                }
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            products3.forEach { product ->
-                ProductItem(product = product)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                products3.forEach { product ->
+                    ProductItem(product = product)
+                }
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            products4.forEach { product ->
-                ProductItem(product = product)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                products4.forEach { product ->
+                    ProductItem(product = product)
+                }
             }
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            products5.forEach { product ->
-                ProductItem(product = product)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                products5.forEach { product ->
+                    ProductItem(product = product)
+                }
             }
         }
     }
+
+
 }
 
 
@@ -347,11 +315,6 @@ fun TopAppBarPreview() {
     GgTopAppBar(onSearch = { "search me" })
 }
 
-@Preview
-@Composable
-fun ProductCategoriesPreview() {
-    ProductCategories()
-}
 
 @Preview
 @Composable
@@ -359,14 +322,4 @@ fun CarouselPreview() {
     ProductCarousel()
 }
 
-@Preview
-@Composable
-fun MakeupListPreview() {
-    MakeupListPane(productList = ProductDataProvider.products)
-}
 
-@Preview
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen()
-}

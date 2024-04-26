@@ -4,6 +4,11 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class ProductColor(
+    @SerialName("hex_value") val hexValue: String
+)
+
+@Serializable
 data class Product (
     val id: Int,
     val brand: String,
@@ -25,8 +30,8 @@ data class Product (
 //    val websiteLink: String,
 
     val description: String,
-    val rating: Double,
-    val category: String,
+    val rating: Double?,
+    val category: String?,
 
     @SerialName("product_type")
     val productType: String,
@@ -34,6 +39,6 @@ data class Product (
 //    @SerialName( "api_featured_image")
 //    val apiFeaturedImage: String,
 
-    @SerialName( "product_colors")
-    val productColors: List<String>?
+    @SerialName("product_colors")
+    val productColors: List<ProductColor>?
 )

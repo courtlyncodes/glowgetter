@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.glowgetter.data.GlowGetterRepository
-import com.example.glowgetter.ui.GlowGetterApplication
+import com.example.glowgetter.GlowGetterApplication
 import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.ProductUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,14 +28,21 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     val productUiState: StateFlow<ProductUiState> = _productUiState.asStateFlow()
 
     private var brandQuery: String? = null
+    private var typeQuery: String = "eyes"
 
     init {
         getProductListByBrand()
+        getProductListByType()
     }
 
     fun onBrandQueryChanged(query: String) {
         brandQuery = query
         getProductListByBrand()
+    }
+
+    fun onTypeQueryChanged(query: String) {
+        typeQuery = query
+        getProductListByType()
     }
 
     fun getProductListByBrand(brandQuery: String? = this.brandQuery) {
@@ -44,6 +51,24 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
             productListUiState = try {
                 val productList = brandQuery?.let { glowGetterRepository.getProductsByBrand(it) }
 
+                if (productList == null) {
+                    ProductListUiState.Error
+                } else {
+                    ProductListUiState.Success(productList)
+                }
+            } catch (e: IOException) {
+                ProductListUiState.Error
+            } catch (e: HttpException) {
+                ProductListUiState.Error
+            }
+        }
+    }
+
+    fun getProductListByType(type: String = "eyeshadow") {
+        viewModelScope.launch {
+            productListUiState = ProductListUiState.Loading
+            productListUiState = try {
+                val productList = glowGetterRepository.getProductsByType(type)
                 if (productList == null) {
                     ProductListUiState.Error
                 } else {

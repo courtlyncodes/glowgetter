@@ -1,4 +1,4 @@
-package com.example.glowgetter.ui
+package com.example.glowgetter
 
 import android.app.Application
 import com.example.glowgetter.data.DefaultGlowGetterAppContainer

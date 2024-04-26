@@ -13,7 +13,7 @@ interface GlowGetterAppContainer {
 // Implementation for the Dependency Injection container at the application level.
 //  Variables are initialized lazily and the same instance is shared across the whole app.
 class DefaultGlowGetterAppContainer : GlowGetterAppContainer {
-    private val baseUrl = "http://makeup-api.herokuapp.com/api/v1/products.json"
+    private val baseUrl = "https://makeup-api.herokuapp.com/api/v1/"
 
     private val json = Json {
         ignoreUnknownKeys = true  // Set ignoreUnknownKeys to true
