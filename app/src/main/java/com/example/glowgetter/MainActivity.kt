@@ -12,6 +12,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.homescreen.HomeScreen
 import com.example.glowgetter.ui.productlist.DetailPane
+import com.example.glowgetter.ui.productlist.FaceCategoryDetailPane
+import com.example.glowgetter.ui.productlist.FaceCategoryDetailPanePreview
+import com.example.glowgetter.ui.productlist.LipsCategoryDetailPane
 import com.example.glowgetter.ui.productlist.ListDetailScreen
 import com.example.glowgetter.ui.theme.GlowGetterTheme
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
@@ -23,11 +26,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             GlowGetterTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-                  WelcomeScreen()
+                LipsCategoryDetailPane({}, {}, {}, {}, {})
                 }
             }
         }

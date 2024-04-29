@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +25,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.glowgetter.R
 
@@ -37,18 +40,26 @@ fun WelcomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = modifier
-//            .fillMaxSize()
+            .fillMaxSize()
             .background(color = colorResource(id = R.color.white))
     ){
-        Text(text = stringResource(id = R.string.app_name))
+        Text(
+            text = stringResource(id = R.string.app_name),
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary
+        )
         Image(
             painter = painterResource(id = R.mipmap.welcome_screen_graphic),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
-//            alignment = Alignment.Center,
             modifier = modifier.size(400.dp)
         )
-       Text(text = stringResource(R.string.tagline))
+       Text(
+           text = stringResource(R.string.tagline),
+           style = MaterialTheme.typography.titleLarge,
+           modifier = modifier.padding(vertical = 8.dp)
+       )
+       Text(text = stringResource(R.string.enter_name))
        OutlinedTextField(
            value = text,
            onValueChange = onValueChange,

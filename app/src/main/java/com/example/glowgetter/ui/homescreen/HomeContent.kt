@@ -7,13 +7,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -26,6 +30,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +38,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -55,24 +61,141 @@ import kotlinx.coroutines.delay
 
 
 @Composable
-fun ProductCategories(
+fun HomeScreen(
     onEyesClick: () -> Unit,
     onFaceClick: () -> Unit,
     onLipsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
-        Card(modifier = modifier.clickable { onEyesClick() }) {
-            Text(text = stringResource(R.string.eyes))
+    val products = ProductDataProvider.products
+    val products1 = ProductDataProvider.products.subList(0, 2)
+    val products2 = ProductDataProvider.products.subList(2, 4)
+    val products3 = ProductDataProvider.products.subList(4, 6)
+    val products4 = ProductDataProvider.products.subList(6, 8)
+    val products5 = ProductDataProvider.products.subList(8, 10)
+
+    Scaffold(
+        topBar = {
+            GgTopAppBar(onSearch = { "search me" })
         }
-        Card(modifier = modifier.clickable { onFaceClick() }) {
-            Text(text = stringResource(R.string.face))
-        }
-        Card(modifier = modifier.clickable { onLipsClick() }) {
-            Text(text = stringResource(R.string.lips))
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(it)
+                .verticalScroll(rememberScrollState())
+        ) {
+            ProductCategories(onEyesClick, onFaceClick, onLipsClick)
+            ProductCarousel()
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    products1.forEach { product ->
+                        ProductItem(product = product)
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    products2.forEach { product ->
+                        ProductItem(product = product)
+                    }
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    products3.forEach { product ->
+                        ProductItem(product = product)
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    products4.forEach { product ->
+                        ProductItem(product = product)
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    products5.forEach { product ->
+                        ProductItem(product = product)
+                    }
+                }
+
         }
     }
 }
+
+
+@Composable
+fun ProductItem(
+    product: Product,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .width(200.dp)
+            .padding(horizontal = 8.dp)
+    ) {
+        Column(
+            modifier = modifier
+                .padding(8.dp)
+        ) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(product.image)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = product.productType,
+                contentScale = ContentScale.Crop,
+                modifier = modifier.aspectRatio(1f)
+            )
+            Text(product.brand)
+            Text(product.name)
+            // add a lazy row of circles for product colors??
+            product.price?.let { Text(it) }
+        }
+    }
+}
+
+// possibly delete
+@Composable
+fun HomePaneMakeupProductsList(
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+) {
+    val productList = ProductDataProvider.products
+
+
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(157.dp),
+        state = rememberLazyGridState(),
+        modifier = modifier.padding(horizontal = 4.dp),
+        contentPadding = contentPadding,
+    ) {
+        items(items = productList) { product ->
+            ProductItem(product = product)
+        }
+    }
+}
+
+//this should also go in the same file as the above composable/.....maybe
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -102,55 +225,65 @@ fun ProductCarousel(
         contentPadding = PaddingValues(horizontal = 16.dp),
         pageSpacing = 16.dp,
         state = pagerState,
+        modifier = modifier.padding(bottom = 16.dp)
     ) { index ->
         val page = index % pageCount
         Image(
             painter = painterResource(photos[page]),
-            contentDescription = photos[page].toString()
+            contentDescription = photos[page].toString(),
+            contentScale = ContentScale.Crop,
+            modifier = modifier
+                .aspectRatio(7f/3f)
         )
     }
 }
 
-// possibly delete
 @Composable
-fun HomePaneMakeupProductsList(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
-    val productList = ProductDataProvider.products
-
-
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(157.dp),
-        state = rememberLazyGridState(),
-        modifier = modifier.padding(horizontal = 4.dp),
-        contentPadding = contentPadding,
-    ) {
-        items(items = productList) { product ->
-            ProductItem(product = product)
-        }
-    }
-}
-
-//this should also go in the same file as the above composable/.....maybe
-@Composable
-fun ProductItem(
-    product: Product,
+fun ProductCategories(
+    onEyesClick: () -> Unit,
+    onFaceClick: () -> Unit,
+    onLipsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Card(modifier = modifier.width(150.dp)) {
-        Column() {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(product.image)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = product.productType,
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+            .padding(12.dp)
+    ) {
+        Card(
+            modifier = modifier
+                .clickable { onEyesClick() }
+        ) {
+            Text(
+                text = stringResource(R.string.eyes),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier
+                    .padding(40.dp)
             )
-            Text(product.brand)
-            Text(product.name)
-            // add a lazy row of circles for product colors
-            product.price?.let { Text(it) }
+        }
+        Spacer(modifier = modifier.weight(1f))
+        Card(
+            modifier = modifier
+                .clickable { onFaceClick() }
+        ) {
+            Text(
+                text = stringResource(R.string.face),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier
+                    .padding(40.dp)
+            )
+        }
+        Spacer(modifier = modifier.weight(1f))
+        Card(
+            modifier = modifier
+                .clickable { onLipsClick() }
+        ) {
+            Text(
+                text = stringResource(R.string.lips),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier
+                    .padding(40.dp)
+            )
         }
     }
 }
@@ -170,13 +303,12 @@ fun GgTopAppBar(
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = modifier
-                .heightIn(96.dp)
+                .heightIn(108.dp)
                 .fillMaxWidth()
         )
         Column(modifier = modifier) {
             Text(text = stringResource(R.string.find))
             Text(text = stringResource(R.string.your_glow))
-//            Spacer(modifier = modifier.padding(16.dp))
             BasicTextField(
                 value = text,
                 onValueChange = {
@@ -189,106 +321,11 @@ fun GgTopAppBar(
                 modifier = Modifier
                     .shadow(5.dp, CircleShape)
                     .background(Color.White, CircleShape)
-//                .padding(horizontal = 20.dp, vertical = 12.dp)
             )
         }
     }
 }
 
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun HomeScreen(
-    onEyesClick: () -> Unit,
-    onFaceClick: () -> Unit,
-    onLipsClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val products1 = ProductDataProvider.products.subList(0, 2)
-    val products2 = ProductDataProvider.products.subList(2, 4)
-    val products3 = ProductDataProvider.products.subList(4, 6)
-    val products4 = ProductDataProvider.products.subList(6, 8)
-    val products5 = ProductDataProvider.products.subList(8, 10)
-
-    Scaffold(
-        topBar = {
-            GgTopAppBar(onSearch = { "search me" })
-        }
-    ) {
-        Column(modifier = Modifier
-            .padding(it)
-            .verticalScroll(rememberScrollState())) {
-
-            ProductCategories(onEyesClick, onFaceClick, onLipsClick)
-            ProductCarousel()
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                products1.forEach { product ->
-                    ProductItem(product = product)
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                products2.forEach { product ->
-                    ProductItem(product = product)
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                products3.forEach { product ->
-                    ProductItem(product = product)
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                products4.forEach { product ->
-                    ProductItem(product = product)
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                products5.forEach { product ->
-                    ProductItem(product = product)
-                }
-            }
-        }
-    }
-
-
-}
-
-
-//    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-//        LazyColumn() {
-//            item {
-//                GgTopAppBar(onSearch = { "search me" })
-//            }
-//            item {
-//                ProductCategories()
-//            }
-//            item {
-//                ProductCarousel()
-//            }
-//            items(count = products.size) { product ->
-//                ProductItem(product = products[product])
-//            }
-//        }
-//        LazyVerticalGrid(columns = GridCells.Fixed(2)) {
-//            items(count = products.size) { product ->
-//                ProductItem(product = products[product])
-//            }
-//        }
-//    }
 
 
 //@Preview
@@ -315,11 +352,14 @@ fun TopAppBarPreview() {
     GgTopAppBar(onSearch = { "search me" })
 }
 
-
 @Preview
 @Composable
 fun CarouselPreview() {
     ProductCarousel()
 }
 
-
+@Preview
+@Composable
+fun HomePanePreview() {
+   HomeScreen({}, {}, {})
+}
