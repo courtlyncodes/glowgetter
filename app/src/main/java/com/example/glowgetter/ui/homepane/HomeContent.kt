@@ -1,4 +1,4 @@
-package com.example.glowgetter.ui.homescreen
+package com.example.glowgetter.ui.homepane
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -14,10 +14,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -38,7 +35,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -84,8 +80,13 @@ fun HomeScreen(
                 .padding(it)
                 .verticalScroll(rememberScrollState())
         ) {
-            ProductCategories(onEyesClick, onFaceClick, onLipsClick)
+            ProductCategories(
+                onEyesClick,
+                onFaceClick,
+                onLipsClick
+            )
             ProductCarousel()
+            Text(text = stringResource(R.string.popular_products))
                 Row(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -165,7 +166,7 @@ fun ProductItem(
                 contentScale = ContentScale.Crop,
                 modifier = modifier.aspectRatio(1f)
             )
-            Text(product.brand)
+            product.brand?.let { Text(it) }
             Text(product.name)
             // add a lazy row of circles for product colors??
             product.price?.let { Text(it) }

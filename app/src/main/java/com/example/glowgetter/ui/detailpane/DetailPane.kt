@@ -1,24 +1,17 @@
 package com.example.glowgetter.ui.detailpane
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -26,7 +19,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
@@ -39,31 +31,101 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.glowgetter.Product
-import com.example.glowgetter.ui.homescreen.HomeScreen
-import com.example.glowgetter.ui.homescreen.ProductItem
+import com.example.glowgetter.ui.homepane.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glowgetter.R
-import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 
+
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
+@Composable
+fun HomeAndCategoryScreen(
+    onFirstCardClick: () -> Unit,
+    onSecondCardClick: () -> Unit,
+    onThirdCardClick: () -> Unit,
+    onFourthCardClick: () -> Unit,
+    onFirstFaceCardClick: () -> Unit,
+    onSecondFaceCardClick: () -> Unit,
+    onThirdFaceCardClick: () -> Unit,
+    onFourthFaceCardClick: () -> Unit,
+    onFifthFaceCardClick: () -> Unit,
+    onSixthFaceCardClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
+) {
+    val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+    var currentDestination by rememberSaveable { mutableStateOf(DetailList.EYES) }
+    val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
+    val uiState by viewModel.productUiState.collectAsState()
+
+    BackHandler(navigator.canNavigateBack()) {
+        navigator.navigateBack()
+    }
+
+    ListDetailPaneScaffold(directive = navigator.scaffoldDirective,
+        value = navigator.scaffoldValue,
+        listPane = {
+            HomeScreen(
+                onEyesClick = {
+                currentDestination = DetailList.EYES
+                viewModel.updateProductCategory("eyes")
+                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+            },
+                onFaceClick = {
+                currentDestination = DetailList.FACE
+                viewModel.updateProductCategory("face")
+                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+            },
+                onLipsClick = {
+                currentDestination = DetailList.LIPS
+                viewModel.updateProductCategory("lips")
+                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+            })
+        },
+        detailPane = {
+            when (currentDestination) {
+                DetailList.EYES -> EyesCategoryDetailPane(
+                    onFirstCardClick = onFirstCardClick,
+                    onSecondCardClick = onSecondCardClick,
+                    onThirdCardClick = onThirdCardClick,
+                    onFourthCardClick = onFourthCardClick
+                )
+
+                DetailList.FACE -> FaceCategoryDetailPane(
+                    onFirstFaceCardClick = onFirstFaceCardClick,
+                    onSecondFaceCardClick = onSecondFaceCardClick,
+                    onThirdFaceCardClick = onThirdFaceCardClick,
+                    onFourthFaceCardClick = onFourthFaceCardClick,
+                    onFifthFaceCardClick = onFifthFaceCardClick,
+                    onSixthFaceCardClick = onSixthFaceCardClick
+                )
+
+                DetailList.LIPS -> LipsCategoryDetailPane()
+            }
+            Log.wtf("face", viewModel.productQuery)
+        })
+}
+
+enum class DetailList {
+    EYES, FACE, LIPS
+}
+
 @Composable
 fun EyesCategoryDetailPane(
-    onCardClick: () -> Unit,
-    onFirstClick: () -> Unit,
-    onSecondClick: () -> Unit,
-    onThirdClick: () -> Unit,
-    onFourthClick: () -> Unit,
-    modifier: Modifier = Modifier
+    onFirstCardClick: () -> Unit,
+    onSecondCardClick: () -> Unit,
+    onThirdCardClick: () -> Unit,
+    onFourthCardClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory),
+
 ) {
     Scaffold(
         topBar = {
@@ -77,16 +139,8 @@ fun EyesCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.eyebrow_pencils),
                     painter = R.mipmap.eyebrow_pencil,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = { },
-                    onFirstClick = { },
-                    onSecondClick = { },
-                    onThirdClick = { },
-                    onFourthClick = { },
-                    description = stringResource(R.string.eyebrow_pencil_des)
+                    description = stringResource(R.string.eyebrow_pencil_des),
+                    modifier = modifier.clickable { onFirstCardClick() }
                 )
             }
             item {
@@ -96,16 +150,8 @@ fun EyesCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.mascara),
                     painter = R.mipmap.mascara,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = { },
-                    onFirstClick = {},
-                    onSecondClick = {},
-                    onThirdClick = {},
-                    onFourthClick = {},
-                    description = stringResource(R.string.mascara_des)
+                    description = stringResource(R.string.mascara_des),
+                    modifier = modifier.clickable { onSecondCardClick() }
                 )
             }
             item {
@@ -115,16 +161,8 @@ fun EyesCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.eyeliner),
                     painter = R.mipmap.eyeliner,
-                    firstSubCategory = "Liquid",
-                    secondSubCategory = "Pencil",
-                    thirdSubCategory = "Gel",
-                    fourthSubCategory = "Cream",
-                    onCardClick = { },
-                    onFirstClick = {},
-                    onSecondClick = {},
-                    onThirdClick = {},
-                    onFourthClick = {},
-                    description = stringResource(R.string.eyeliner_des)
+                    description = stringResource(R.string.eyeliner_des),
+                    modifier = modifier.clickable { onThirdCardClick() }
                 )
             }
             item {
@@ -134,16 +172,8 @@ fun EyesCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.eyeshadow),
                     painter = R.mipmap.eyeshadow_product,
-                    firstSubCategory = "Palette",
-                    secondSubCategory = "Pencil",
-                    thirdSubCategory = "Cream",
-                    fourthSubCategory = null,
-                    onCardClick = { },
-                    onFirstClick = {},
-                    onSecondClick = {},
-                    onThirdClick = {},
-                    onFourthClick = {},
-                    description = stringResource(R.string.eyeshadow_des)
+                    description = stringResource(R.string.eyeshadow_des),
+                    modifier = modifier.clickable { onFourthCardClick() }
                 )
             }
             item {
@@ -155,11 +185,12 @@ fun EyesCategoryDetailPane(
 
 @Composable
 fun FaceCategoryDetailPane(
-    onCardClick: () -> Unit,
-    onFirstClick: () -> Unit,
-    onSecondClick: () -> Unit,
-    onThirdClick: () -> Unit,
-    onFourthClick: () -> Unit,
+    onFirstFaceCardClick: () -> Unit,
+    onSecondFaceCardClick: () -> Unit,
+    onThirdFaceCardClick: () -> Unit,
+    onFourthFaceCardClick: () -> Unit,
+    onFifthFaceCardClick: () -> Unit,
+    onSixthFaceCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -174,96 +205,65 @@ fun FaceCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.foundation),
                     painter = R.mipmap.liquid_foundation,
-                    firstSubCategory = "Liquid",
-                    secondSubCategory = "BB & CC Cream",
-                    thirdSubCategory = "Mineral",
-                    fourthSubCategory = "Powder",
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
-                    description = stringResource(R.string.foundation_des)
+                    description = stringResource(R.string.foundation_des),
+                    modifier = modifier.clickable { onFirstFaceCardClick ()}
+
+
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.blush),
                     painter = R.mipmap.blush,
-                    firstSubCategory = "Powder",
-                    secondSubCategory = "Cream",
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
-                    description = stringResource(R.string.blush_des)
+                    description = stringResource(R.string.blush_des),
+                    modifier = modifier.clickable { onSecondFaceCardClick ()}
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.bronzer),
                     painter = R.mipmap.bronzer,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
-                    description = stringResource(R.string.bronzer_des)
+                    description = stringResource(R.string.bronzer_des),
+                    modifier = modifier.clickable { onThirdFaceCardClick ()}
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.concealer),
                     painter = R.mipmap.concealer,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
-                    description = stringResource(R.string.concealer_des)
+                    description = stringResource(R.string.concealer_des),
+                    modifier = modifier.clickable { onFourthFaceCardClick ()}
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.contour),
                     painter = R.mipmap.contour,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
-                    description = stringResource(R.string.contour_des)
+                    description = stringResource(R.string.contour_des),
+                    modifier = modifier.clickable { onFifthFaceCardClick ()}
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.highlighter),
                     painter = R.mipmap.highlighter,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
-                    description = stringResource(R.string.highlighter_des)
+                    description = stringResource(R.string.highlighter_des),
+                    modifier = modifier.clickable { onSixthFaceCardClick ()}
                 )
             }
         }
@@ -272,11 +272,6 @@ fun FaceCategoryDetailPane(
 
 @Composable
 fun LipsCategoryDetailPane(
-    onCardClick: () -> Unit,
-    onFirstClick: () -> Unit,
-    onSecondClick: () -> Unit,
-    onThirdClick: () -> Unit,
-    onFourthClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -291,47 +286,26 @@ fun LipsCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_gloss),
                     painter = R.mipmap.lip_gloss,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
                     description = stringResource(R.string.lip_gloss_des)
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_liner),
                     painter = R.mipmap.lipliner_pencil,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
                     description = stringResource(R.string.lip_liner_des)
                 )
+            }
+            item {
+                Spacer(modifier = Modifier.size(16.dp))
             }
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.lipstick),
                     painter = R.mipmap.lipstick_product,
-                    firstSubCategory = null,
-                    secondSubCategory = null,
-                    thirdSubCategory = null,
-                    fourthSubCategory = null,
-                    onCardClick = onCardClick,
-                    onFirstClick = onFirstClick,
-                    onSecondClick = onSecondClick,
-                    onThirdClick = onThirdClick,
-                    onFourthClick = onFourthClick,
                     description = stringResource(R.string.lipstick_des)
                 )
             }
@@ -343,15 +317,6 @@ fun LipsCategoryDetailPane(
 fun CategoryDetailCard(
     painter: Int,
     productType: String,
-    onCardClick: () -> Unit,
-    firstSubCategory: String?,
-    secondSubCategory: String?,
-    thirdSubCategory: String?,
-    fourthSubCategory: String?,
-    onFirstClick: () -> Unit,
-    onSecondClick: () -> Unit,
-    onThirdClick: () -> Unit,
-    onFourthClick: () -> Unit,
     description: String,
     modifier: Modifier = Modifier
 
@@ -362,9 +327,7 @@ fun CategoryDetailCard(
             contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
             disabledContentColor = MaterialTheme.colorScheme.onPrimary,
-        ),
-        modifier = modifier
-            .clickable { onCardClick() }
+        )
     ) {
         Column(
             modifier = modifier
@@ -389,27 +352,6 @@ fun CategoryDetailCard(
                             .size(150.dp)
                             .aspectRatio(8f / 7f)
                     )
-
-                    if (firstSubCategory != null) {
-                        Text(
-                            text = firstSubCategory,
-                            modifier = Modifier.clickable { onFirstClick() })
-                    }
-                    if (secondSubCategory != null) {
-                        Text(
-                            text = secondSubCategory,
-                            modifier = Modifier.clickable { onSecondClick() })
-                    }
-                    if (thirdSubCategory != null) {
-                        Text(
-                            text = thirdSubCategory,
-                            modifier = Modifier.clickable { onThirdClick() })
-                    }
-                    if (fourthSubCategory != null) {
-                        Text(
-                            text = fourthSubCategory,
-                            modifier = Modifier.clickable { onFourthClick() })
-                    }
                 }
                 Text(
                     text = description,
@@ -423,60 +365,7 @@ fun CategoryDetailCard(
     }
 }
 
-enum class DetailList {
-    EYES, FACE, LIPS
-}
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
-@Composable
-fun ListDetailScreen(
-    onCardClick: () -> Unit,
-    onFirstClick: () -> Unit,
-    onSecondClick: () -> Unit,
-    onThirdClick: () -> Unit,
-    onFourthClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-) {
-    val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
-    var currentDestination by rememberSaveable { mutableStateOf(DetailList.EYES) }
-    val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-    val uiState by viewModel.productUiState.collectAsState()
-
-    BackHandler(navigator.canNavigateBack()) {
-        navigator.navigateBack()
-    }
-
-    ListDetailPaneScaffold(directive = navigator.scaffoldDirective,
-        value = navigator.scaffoldValue,
-        listPane = {
-            HomeScreen(onEyesClick = {
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            }, onFaceClick = {
-                currentDestination = DetailList.FACE
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            }, onLipsClick = {
-                currentDestination = DetailList.LIPS
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            })
-        },
-        detailPane = {
-            when (currentDestination) {
-                DetailList.EYES -> EyesCategoryDetailPane(
-                    onCardClick, onFirstClick, onSecondClick, onThirdClick, onFourthClick
-                )
-
-                DetailList.FACE -> FaceCategoryDetailPane(
-                    onCardClick, onFirstClick, onSecondClick, onThirdClick, onFourthClick
-                )
-
-                DetailList.LIPS -> LipsCategoryDetailPane(
-                    onCardClick, onFirstClick, onSecondClick, onThirdClick, onFourthClick
-                )
-            }
-
-        })
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -494,25 +383,25 @@ fun DetailPaneTopAppBar(
 }
 
 
-@Preview(
-    showBackground = true,
-    showSystemUi = true
-)
-@Composable
-fun EyesCategoryDetailPanePreview(
+//@Preview(
+//    showBackground = true,
+//    showSystemUi = true
+//)
+//@Composable
+//fun EyesCategoryDetailPanePreview(
+//
+//) {
+//    EyesCategoryDetailPane({ })
+//}
 
-) {
-    EyesCategoryDetailPane({ }, { }, { }, { }, { })
-}
-
-@Preview
-@Composable
-fun LipsCategoryDetailPanePreview() {
-    LipsCategoryDetailPane({ }, { }, { }, { }, { })
-}
-
-@Preview
-@Composable
-fun FaceCategoryDetailPanePreview() {
-    FaceCategoryDetailPane({ }, { }, { }, { }, { })
-}
+//@Preview
+//@Composable
+//fun LipsCategoryDetailPanePreview() {
+//    LipsCategoryDetailPane({ })
+//}
+//
+//@Preview
+//@Composable
+//fun FaceCategoryDetailPanePreview() {
+//    FaceCategoryDetailPane({ },)
+//}

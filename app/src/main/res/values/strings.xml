@@ -37,4 +37,6 @@
     <string name="concealer_des">Feeling like those pesky blemishes or dark circles are stealing your spotlight? Concealer is here to save the day! It\'s like a magic wand for your face, helping to camouflage imperfections and brighten tired-looking eyes.</string>
     <string name="contour_des">Ever wonder how makeup artists achieve those chiseled cheekbones and defined jawlines? Contouring is their secret weapon (and now it can be yours too!). It\'s like a magic light and shadow kit for your face, helping you create depth and dimension for a more sculpted look.</string>
     <string name="highlighter_des">Highlighter is your key to unlocking that mythical radiance! It\'s like a magic potion for your face, adding a touch of shimmer and light that takes your makeup look from ordinary to extraordinary.</string>
+    <string name="error">Error Loading Content</string>
+    <string name="popular_products">Popular Products</string>
 </resources>

@@ -7,11 +7,7 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    // Return products by brand
-    @GET("")
-    suspend fun getProductsByBrand(@Query("brand") brand: String): Response<List<Product>>
-
-    // Return products by type
+    // Return products by type and its subcategories
     @GET("products.json")
-    suspend fun getProductsByType(@Query("product_type") type: String): Response<List<Product>>
+    suspend fun getProductsByType(@Query("product_type") type: String, @Query("product_category") subtype: String): Response<List<Product>>
 }

@@ -27,30 +27,29 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     private val _productUiState = MutableStateFlow(ProductUiState())
     val productUiState: StateFlow<ProductUiState> = _productUiState.asStateFlow()
 
-    private var brandQuery: String? = null
-    private var typeQuery: String = "eyeshadow"
+    var productQuery: String = ""
+    var videoId: String = ""
+
+  var typeQuery: String = ""
+    private var subtypeQuery: String = ""
 
     init {
-        getProductListByBrand()
-        getProductListByType()
+        getProductListByType(typeQuery, subtypeQuery)
     }
 
-    fun onBrandQueryChanged(query: String) {
-        brandQuery = query
-        getProductListByBrand()
+    fun onTypeQueryChanged(firstQuery: String, secondQuery: String?) {
+        typeQuery = firstQuery
+        if (secondQuery != null) {
+            subtypeQuery = secondQuery
+        }
+        getProductListByType(typeQuery, subtypeQuery)
     }
 
-    fun onTypeQueryChanged(query: String) {
-        typeQuery = query
-        getProductListByType()
-    }
-
-    fun getProductListByBrand(brandQuery: String? = this.brandQuery) {
+    fun getProductListByType(type: String , subtype: String) {
         viewModelScope.launch {
             productListUiState = ProductListUiState.Loading
             productListUiState = try {
-                val productList = brandQuery?.let { glowGetterRepository.getProductsByBrand(it) }
-
+                val productList = glowGetterRepository.getProductsByType(type, subtype)
                 if (productList == null) {
                     ProductListUiState.Error
                 } else {
@@ -64,23 +63,15 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         }
     }
 
-    fun getProductListByType(type: String = "eyeshadow") {
-        viewModelScope.launch {
-            productListUiState = ProductListUiState.Loading
-            productListUiState = try {
-                val productList = glowGetterRepository.getProductsByType("eyeshadowi")
-                if (productList == null) {
-                    ProductListUiState.Error
-                } else {
-                    ProductListUiState.Success(productList)
-                }
-            } catch (e: IOException) {
-                ProductListUiState.Error
-            } catch (e: HttpException) {
-                ProductListUiState.Error
-            }
-        }
+    fun updateProductCategory(category: String) {
+        productQuery = category
     }
+
+    fun updateVideoId(videoId: String) {
+        this.videoId = videoId
+    }
+
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

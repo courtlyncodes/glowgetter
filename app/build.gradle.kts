@@ -81,7 +81,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
-    //
+    //YouTube player
+    implementation(libs.core)
+    implementation(libs.lottie.compose)
 
 
     testImplementation(libs.junit)

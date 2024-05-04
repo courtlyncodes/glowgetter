@@ -11,7 +11,7 @@ data class ProductColor(
 @Serializable
 data class Product (
     val id: Int,
-    val brand: String,
+    val brand: String?,
     val name: String,
     val price: String?,
 
@@ -29,7 +29,7 @@ data class Product (
 //    @SerialName("website_link")
 //    val websiteLink: String,
 
-    val description: String,
+    val description: String?,
     val rating: Double?,
     val category: String?,
 

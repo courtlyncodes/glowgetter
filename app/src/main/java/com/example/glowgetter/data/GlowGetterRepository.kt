@@ -4,27 +4,14 @@ import com.example.glowgetter.Product
 import com.example.glowgetter.network.ApiService
 
 interface GlowGetterRepository {
-    suspend fun getProductsByBrand(brand: String): List<Product>?
-    suspend fun getProductsByType(type: String): List<Product>?
+    suspend fun getProductsByType(type: String, subtype: String): List<Product>?
 }
 
 class DefaultGlowGetterRepository(private val apiService: ApiService) : GlowGetterRepository {
-    override suspend fun getProductsByBrand(brand: String): List<Product>? {
+
+    override suspend fun getProductsByType(type: String, subtype: String): List<Product>? {
         return try {
-            val res = apiService.getProductsByBrand(brand)
-            if (res.isSuccessful) {
-                res.body() ?: emptyList()
-            } else {
-                emptyList()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
-    }
-    override suspend fun getProductsByType(type: String): List<Product>? {
-        return try {
-            val res = apiService.getProductsByType(type)
+            val res = apiService.getProductsByType(type, subtype)
             if (res.isSuccessful) {
                 res.body() ?: emptyList()
             } else {
