@@ -3,6 +3,5 @@ package com.example.glowgetter.ui
 import com.example.glowgetter.Product
 
 data class ProductUiState(
-    val product: Product? = null,
-    val products: List<Product> = emptyList()
+    val favorites: List<Product> = emptyList()
 )

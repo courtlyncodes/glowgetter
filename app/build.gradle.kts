@@ -69,6 +69,8 @@ dependencies {
     implementation(libs.okhttp)
     // Coil
     implementation(libs.coil.compose)
+    //Glide
+    implementation(libs.landscapist.glide)
     // Kotlin Serializer
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.ui.text.google.fonts)

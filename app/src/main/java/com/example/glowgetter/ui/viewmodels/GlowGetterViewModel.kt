@@ -10,12 +10,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.glowgetter.data.GlowGetterRepository
 import com.example.glowgetter.GlowGetterApplication
+import com.example.glowgetter.Product
 import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.ProductUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -30,8 +33,15 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     var productQuery: String = ""
     var videoId: String = ""
 
-  var typeQuery: String = ""
-    private var subtypeQuery: String = ""
+    var typeQuery: String = ""
+    var subtypeQuery: String = ""
+
+    var productName: String = ""
+
+    var product: Product? = null
+
+    var favoritesList: List<Product> = emptyList()
+
 
     init {
         getProductListByType(typeQuery, subtypeQuery)
@@ -45,15 +55,34 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         getProductListByType(typeQuery, subtypeQuery)
     }
 
+    suspend fun checkImageStatus(imageUrl: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val connection = java.net.URL(imageUrl).openConnection() as java.net.HttpURLConnection
+                connection.requestMethod = "HEAD"
+                val statusCode = connection.responseCode
+                statusCode == java.net.HttpURLConnection.HTTP_OK
+            } catch (e: IOException) {
+                // Handle exceptions, such as network errors
+                e.printStackTrace()
+                false
+            }
+        }
+    }
+
     fun getProductListByType(type: String , subtype: String) {
         viewModelScope.launch {
             productListUiState = ProductListUiState.Loading
             productListUiState = try {
                 val productList = glowGetterRepository.getProductsByType(type, subtype)
+
                 if (productList == null) {
                     ProductListUiState.Error
                 } else {
-                    ProductListUiState.Success(productList)
+                    val validProducts = productList.filter { product ->
+                        checkImageStatus(product.image)
+                    }
+                    ProductListUiState.Success(validProducts)
                 }
             } catch (e: IOException) {
                 ProductListUiState.Error
@@ -61,6 +90,16 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
                 ProductListUiState.Error
             }
         }
+    }
+
+    fun updateFavoritesList(product: Product) {
+        val updatedFavorites = _productUiState.value.favorites.toMutableList()
+        if (updatedFavorites.contains(product)) {
+            updatedFavorites.remove(product)
+        } else {
+            updatedFavorites.add(product)
+        }
+        _productUiState.value = _productUiState.value.copy(favorites = updatedFavorites)
     }
 
     fun updateProductCategory(category: String) {
@@ -71,6 +110,13 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         this.videoId = videoId
     }
 
+    fun updateProductName(productName: String) {
+        this.productName = productName
+    }
+
+    fun updateProduct(product: Product) {
+        this.product = product
+    }
 
 
     companion object {

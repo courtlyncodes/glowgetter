@@ -4,9 +4,9 @@
     <string name="eyes">Eyes</string>
     <string name="face">Face</string>
     <string name="lips">Lips</string>
-    <string name="home">home</string>
+    <string name="home">Home</string>
     <string name="categories">categories</string>
-    <string name="favorites">favorites</string>
+    <string name="favorites">Favorites</string>
     <string name="guides">guides</string>
     <string name="find">Find</string>
     <string name="your_glow">Your Glow</string>
@@ -39,4 +39,12 @@
     <string name="highlighter_des">Highlighter is your key to unlocking that mythical radiance! It\'s like a magic potion for your face, adding a touch of shimmer and light that takes your makeup look from ordinary to extraordinary.</string>
     <string name="error">Error Loading Content</string>
     <string name="popular_products">Popular Products</string>
+    <string name="liquid_foundation">Liquid Foundation</string>
+    <string name="bb_cc_cream"><![CDATA[BB & CC Cream]]></string>
+    <string name="mineral_foundation">Mineral Foundation</string>
+    <string name="powder_foundation">Powder Foundation</string>
+    <string name="powder_blush">Powder</string>
+    <string name="cream_blush">Cream</string>
+    <string name="store_locator">Store Locator</string>
+    <string name="guides_and_tutorials">Guides</string>
 </resources>

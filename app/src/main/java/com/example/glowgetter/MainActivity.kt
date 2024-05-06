@@ -8,6 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.detailpane.EyesCategoryDetailPane
 import com.example.glowgetter.ui.detailpane.LipsCategoryDetailPane
 import com.example.glowgetter.ui.productlist.LoadingScreen
@@ -23,9 +24,7 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-//                EyesCategoryDetailPane({}, {}, {}, {}, {})
-                 NavHost()
+                    NavHost()
                 }
             }
         }

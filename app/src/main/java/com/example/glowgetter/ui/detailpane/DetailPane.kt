@@ -35,11 +35,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.glowgetter.ui.homepane.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.glowgetter.Product
 import com.example.glowgetter.R
+import com.example.glowgetter.ui.ProductUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 
@@ -56,7 +57,12 @@ fun HomeAndCategoryScreen(
     onThirdFaceCardClick: () -> Unit,
     onFourthFaceCardClick: () -> Unit,
     onFifthFaceCardClick: () -> Unit,
-    onSixthFaceCardClick: () -> Unit,
+    onFirstLipsCardClick: () -> Unit,
+    onSecondLipsCardClick: () -> Unit,
+    onThirdLipsCardClick: () -> Unit,
+    onProductClick: (Product) -> Unit,
+    onFavoritesClick: (Product) -> Unit,
+    favoritesUiState: ProductUiState,
     modifier: Modifier = Modifier,
     viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
 ) {
@@ -87,7 +93,12 @@ fun HomeAndCategoryScreen(
                 currentDestination = DetailList.LIPS
                 viewModel.updateProductCategory("lips")
                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            })
+            },
+                onProductClick = onProductClick,
+                onFavoritesClick = onFavoritesClick,
+                favoritesUiState = favoritesUiState,
+
+            )
         },
         detailPane = {
             when (currentDestination) {
@@ -104,10 +115,13 @@ fun HomeAndCategoryScreen(
                     onThirdFaceCardClick = onThirdFaceCardClick,
                     onFourthFaceCardClick = onFourthFaceCardClick,
                     onFifthFaceCardClick = onFifthFaceCardClick,
-                    onSixthFaceCardClick = onSixthFaceCardClick
                 )
 
-                DetailList.LIPS -> LipsCategoryDetailPane()
+                DetailList.LIPS -> LipsCategoryDetailPane(
+                    onFirstLipsClick = onFirstLipsCardClick,
+                    onSecondLipsClick = onSecondLipsCardClick,
+                    onThirdLipsClick = onThirdLipsCardClick
+                )
             }
             Log.wtf("face", viewModel.productQuery)
         })
@@ -190,7 +204,6 @@ fun FaceCategoryDetailPane(
     onThirdFaceCardClick: () -> Unit,
     onFourthFaceCardClick: () -> Unit,
     onFifthFaceCardClick: () -> Unit,
-    onSixthFaceCardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -227,21 +240,10 @@ fun FaceCategoryDetailPane(
             }
             item {
                 CategoryDetailCard(
-                    productType = stringResource(R.string.bronzer),
-                    painter = R.mipmap.bronzer,
-                    description = stringResource(R.string.bronzer_des),
-                    modifier = modifier.clickable { onThirdFaceCardClick ()}
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.size(16.dp))
-            }
-            item {
-                CategoryDetailCard(
                     productType = stringResource(R.string.concealer),
                     painter = R.mipmap.concealer,
                     description = stringResource(R.string.concealer_des),
-                    modifier = modifier.clickable { onFourthFaceCardClick ()}
+                    modifier = modifier.clickable { onThirdFaceCardClick() }
                 )
             }
             item {
@@ -252,7 +254,7 @@ fun FaceCategoryDetailPane(
                     productType = stringResource(R.string.contour),
                     painter = R.mipmap.contour,
                     description = stringResource(R.string.contour_des),
-                    modifier = modifier.clickable { onFifthFaceCardClick ()}
+                    modifier = modifier.clickable { onFourthFaceCardClick ()}
                 )
             }
             item {
@@ -263,7 +265,7 @@ fun FaceCategoryDetailPane(
                     productType = stringResource(R.string.highlighter),
                     painter = R.mipmap.highlighter,
                     description = stringResource(R.string.highlighter_des),
-                    modifier = modifier.clickable { onSixthFaceCardClick ()}
+                    modifier = modifier.clickable { onFifthFaceCardClick ()}
                 )
             }
         }
@@ -272,6 +274,9 @@ fun FaceCategoryDetailPane(
 
 @Composable
 fun LipsCategoryDetailPane(
+    onFirstLipsClick: () -> Unit,
+    onSecondLipsClick: () -> Unit,
+    onThirdLipsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -286,7 +291,8 @@ fun LipsCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_gloss),
                     painter = R.mipmap.lip_gloss,
-                    description = stringResource(R.string.lip_gloss_des)
+                    description = stringResource(R.string.lip_gloss_des),
+                    modifier = modifier.clickable { onFirstLipsClick() }
                 )
             }
             item {
@@ -296,7 +302,8 @@ fun LipsCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_liner),
                     painter = R.mipmap.lipliner_pencil,
-                    description = stringResource(R.string.lip_liner_des)
+                    description = stringResource(R.string.lip_liner_des),
+                    modifier = modifier.clickable { onSecondLipsClick() }
                 )
             }
             item {
@@ -306,7 +313,8 @@ fun LipsCategoryDetailPane(
                 CategoryDetailCard(
                     productType = stringResource(R.string.lipstick),
                     painter = R.mipmap.lipstick_product,
-                    description = stringResource(R.string.lipstick_des)
+                    description = stringResource(R.string.lipstick_des),
+                    modifier = modifier.clickable { onThirdLipsClick() }
                 )
             }
         }
@@ -381,27 +389,3 @@ fun DetailPaneTopAppBar(
         }
     )
 }
-
-
-//@Preview(
-//    showBackground = true,
-//    showSystemUi = true
-//)
-//@Composable
-//fun EyesCategoryDetailPanePreview(
-//
-//) {
-//    EyesCategoryDetailPane({ })
-//}
-
-//@Preview
-//@Composable
-//fun LipsCategoryDetailPanePreview() {
-//    LipsCategoryDetailPane({ })
-//}
-//
-//@Preview
-//@Composable
-//fun FaceCategoryDetailPanePreview() {
-//    FaceCategoryDetailPane({ },)
-//}

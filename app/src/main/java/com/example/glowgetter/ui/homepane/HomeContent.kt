@@ -2,7 +2,6 @@ package com.example.glowgetter.ui.homepane
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,19 +13,17 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -36,24 +33,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.glowgetter.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
+import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.glowgetter.ui.ProductUiState
 import kotlinx.coroutines.delay
-
-
 
 
 @Composable
@@ -61,9 +55,11 @@ fun HomeScreen(
     onEyesClick: () -> Unit,
     onFaceClick: () -> Unit,
     onLipsClick: () -> Unit,
+    onProductClick: (Product) -> Unit,
+    onFavoritesClick: (Product) -> Unit,
+    favoritesUiState: ProductUiState,
     modifier: Modifier = Modifier
 ) {
-    val products = ProductDataProvider.products
     val products1 = ProductDataProvider.products.subList(0, 2)
     val products2 = ProductDataProvider.products.subList(2, 4)
     val products3 = ProductDataProvider.products.subList(4, 6)
@@ -72,7 +68,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            GgTopAppBar(onSearch = { "search me" })
+            GgTopAppBar()
         }
     ) {
         Column(
@@ -93,7 +89,12 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     products1.forEach { product ->
-                        ProductItem(product = product)
+                        ProductItem(
+                            product = product,
+                            onProductClick = onProductClick,
+                            onFavoritesClick = onFavoritesClick,
+                            favoritesUiState = favoritesUiState
+                        )
                     }
                 }
                 Row(
@@ -103,7 +104,12 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     products2.forEach { product ->
-                        ProductItem(product = product)
+                        ProductItem(
+                            product = product,
+                            onProductClick = onProductClick,
+                            onFavoritesClick = onFavoritesClick,
+                            favoritesUiState = favoritesUiState
+                        )
                     }
                 }
 
@@ -114,7 +120,12 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     products3.forEach { product ->
-                        ProductItem(product = product)
+                        ProductItem(
+                            product = product,
+                            onProductClick = onProductClick,
+                            onFavoritesClick = onFavoritesClick,
+                            favoritesUiState = favoritesUiState
+                        )
                     }
                 }
                 Row(
@@ -124,7 +135,12 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     products4.forEach { product ->
-                        ProductItem(product = product)
+                        ProductItem(
+                            product = product,
+                            onProductClick = onProductClick,
+                            onFavoritesClick = onFavoritesClick,
+                            favoritesUiState = favoritesUiState
+                            )
                     }
                 }
                 Row(
@@ -134,7 +150,12 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     products5.forEach { product ->
-                        ProductItem(product = product)
+                        ProductItem(
+                            product = product,
+                            onProductClick = onProductClick,
+                            onFavoritesClick = onFavoritesClick,
+                            favoritesUiState = favoritesUiState
+                        )
                     }
                 }
 
@@ -142,61 +163,49 @@ fun HomeScreen(
     }
 }
 
-
 @Composable
 fun ProductItem(
     product: Product,
+    onProductClick: (Product) -> Unit,
+    onFavoritesClick: (Product) -> Unit,
+    favoritesUiState: ProductUiState,
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .width(200.dp)
-            .padding(horizontal = 8.dp)
-    ) {
-        Column(
+        Card(
             modifier = modifier
+                .width(200.dp)
                 .padding(8.dp)
+                .clickable { onProductClick(product) }
         ) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(product.image)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = product.productType,
-                contentScale = ContentScale.Crop,
-                modifier = modifier.aspectRatio(1f)
-            )
-            product.brand?.let { Text(it) }
-            Text(product.name)
-            // add a lazy row of circles for product colors??
-            product.price?.let { Text(it) }
+            Column(
+                modifier = modifier
+                    .padding(8.dp)
+            ) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(product.image)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = product.productType,
+                    contentScale = ContentScale.Crop,
+                    modifier = modifier.aspectRatio(1f)
+                )
+                Row() {
+                    product.brand?.let { Text(it) }
+                    Spacer(modifier = modifier.weight(1f))
+                    Icon(
+                        if (favoritesUiState.favorites.contains(product)) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        contentDescription = null,
+                        tint = Color.Magenta,
+                        modifier = Modifier
+                            .size(18.dp)
+                            .clickable { onFavoritesClick(product) }
+                    )
+                }
+                Text(product.name)
+            }
         }
     }
-}
-
-// possibly delete
-@Composable
-fun HomePaneMakeupProductsList(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
-) {
-    val productList = ProductDataProvider.products
-
-
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(157.dp),
-        state = rememberLazyGridState(),
-        modifier = modifier.padding(horizontal = 4.dp),
-        contentPadding = contentPadding,
-    ) {
-        items(items = productList) { product ->
-            ProductItem(product = product)
-        }
-    }
-}
-
-//this should also go in the same file as the above composable/.....maybe
-
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -292,7 +301,6 @@ fun ProductCategories(
 @Composable
 fun GgTopAppBar(
     modifier: Modifier = Modifier,
-    onSearch: (String) -> Unit
 ) {
     val text by remember {
         mutableStateOf("")
@@ -310,57 +318,7 @@ fun GgTopAppBar(
         Column(modifier = modifier) {
             Text(text = stringResource(R.string.find))
             Text(text = stringResource(R.string.your_glow))
-            BasicTextField(
-                value = text,
-                onValueChange = {
-                    onSearch(it)
-                },
-                maxLines = 1,
-                singleLine = true,
-                textStyle = TextStyle(color = Color.Black),
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                modifier = Modifier
-                    .shadow(5.dp, CircleShape)
-                    .background(Color.White, CircleShape)
-            )
+
         }
     }
-}
-
-
-
-//@Preview
-//@Composable
-//fun ProductItemPreview() {
-//    val product = Product(
-//        id = 1,
-//        brand = "brand",
-//        name = "name",
-//        price = "price",
-//        image = "image",
-//        productType = "productType",
-//        description = "description",
-//        rating = 5.0,
-//        category = "category",
-//        productColors = listOf("color", "color")
-//    )
-//    ProductItem(product)
-//}
-
-@Preview
-@Composable
-fun TopAppBarPreview() {
-    GgTopAppBar(onSearch = { "search me" })
-}
-
-@Preview
-@Composable
-fun CarouselPreview() {
-    ProductCarousel()
-}
-
-@Preview
-@Composable
-fun HomePanePreview() {
-   HomeScreen({}, {}, {})
 }
