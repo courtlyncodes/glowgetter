@@ -40,7 +40,7 @@ import com.example.glowgetter.ui.homepane.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glowgetter.Product
 import com.example.glowgetter.R
-import com.example.glowgetter.ui.ProductUiState
+import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 
@@ -62,14 +62,14 @@ fun HomeAndCategoryScreen(
     onThirdLipsCardClick: () -> Unit,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: ProductUiState,
+    favoritesUiState: FavoritesUiState,
     modifier: Modifier = Modifier,
     viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
 ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
     var currentDestination by rememberSaveable { mutableStateOf(DetailList.EYES) }
     val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-    val uiState by viewModel.productUiState.collectAsState()
+    val uiState by viewModel.favoritesUiState.collectAsState()
 
     BackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()

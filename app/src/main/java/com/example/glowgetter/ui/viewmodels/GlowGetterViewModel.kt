@@ -12,7 +12,7 @@ import com.example.glowgetter.data.GlowGetterRepository
 import com.example.glowgetter.GlowGetterApplication
 import com.example.glowgetter.Product
 import com.example.glowgetter.ui.ProductListUiState
-import com.example.glowgetter.ui.ProductUiState
+import com.example.glowgetter.ui.FavoritesUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,8 +27,8 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     var productListUiState: ProductListUiState by mutableStateOf(ProductListUiState.Loading)
         private set
 
-    private val _productUiState = MutableStateFlow(ProductUiState())
-    val productUiState: StateFlow<ProductUiState> = _productUiState.asStateFlow()
+    private val _favoritesUiState = MutableStateFlow(FavoritesUiState())
+    val favoritesUiState: StateFlow<FavoritesUiState> = _favoritesUiState.asStateFlow()
 
     var productQuery: String = ""
     var videoId: String = ""
@@ -40,7 +40,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
 
     var product: Product? = null
 
-    var favoritesList: List<Product> = emptyList()
+//    var favoritesList: List<Product> = emptyList()
 
 
     init {
@@ -93,13 +93,13 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     }
 
     fun updateFavoritesList(product: Product) {
-        val updatedFavorites = _productUiState.value.favorites.toMutableList()
+        val updatedFavorites = _favoritesUiState.value.favorites.toMutableList()
         if (updatedFavorites.contains(product)) {
             updatedFavorites.remove(product)
         } else {
             updatedFavorites.add(product)
         }
-        _productUiState.value = _productUiState.value.copy(favorites = updatedFavorites)
+        _favoritesUiState.value = _favoritesUiState.value.copy(favorites = updatedFavorites)
     }
 
     fun updateProductCategory(category: String) {

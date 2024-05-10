@@ -1,15 +1,11 @@
 package com.example.glowgetter
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Place
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -18,13 +14,9 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,13 +25,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.glowgetter.ui.detailpane.HomeAndCategoryScreen
-import com.example.glowgetter.ui.productlist.DetailScreen
-import com.example.glowgetter.ui.productlist.EyesLipsProductListScreen
-import com.example.glowgetter.ui.productlist.FaceProductListScreen
-import com.example.glowgetter.ui.productlist.FavoritesScreen
+import com.example.glowgetter.ui.productinfo.DetailScreen
+import com.example.glowgetter.ui.productinfo.EyesLipsProductListScreen
+import com.example.glowgetter.ui.productinfo.FaceProductListScreen
+import com.example.glowgetter.ui.productinfo.FavoritesScreen
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import com.example.glowgetter.ui.welcomescreen.WelcomeScreen
-import kotlinx.coroutines.launch
 
 enum class NavGraph {
     WELCOME,
@@ -53,7 +44,7 @@ enum class NavGraph {
 enum class AppDestinations {
     HOME,
     FAVORITES,
-    STORE,
+    GLOSSARY,
     GUIDES
 }
 
@@ -65,7 +56,7 @@ fun NavHost(
 ) {
     val startDestination: String = NavGraph.HOME.name
     val currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
-    val favoritesUiState by viewModel.productUiState.collectAsState()
+    val favoritesUiState by viewModel.favoritesUiState.collectAsState()
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -93,11 +84,11 @@ fun NavHost(
                 )
                 item(
                     icon = {
-                        Icon(Icons.Filled.LocationOn,
-                            contentDescription = stringResource(R.string.store_locator))
+                        Icon(Icons.Filled.Info,
+                            contentDescription = stringResource(R.string.glossary))
                     },
-                    label = { Text(stringResource(R.string.store_locator)) },
-                    selected = currentDestination == AppDestinations.STORE,
+                    label = { Text(stringResource(R.string.glossary)) },
+                    selected = currentDestination == AppDestinations.GLOSSARY,
                     onClick = {
                         navController.navigate(NavGraph.EYES_LIPS.name)
                     }
@@ -270,7 +261,11 @@ fun NavHost(
                 composable(NavGraph.DETAIL.name) {
                     viewModel.product?.let { product ->
                         DetailScreen(
-                            product = product
+                            product = product,
+                            onFavoritesClick = {
+                                viewModel.updateFavoritesList(it)
+                            },
+                            favoritesUiState = favoritesUiState
                         )
                     }
                 }
