@@ -89,7 +89,7 @@ fun EyesLipsProductListScreen(
     Column {
         LazyColumn() {
             item {
-                ProductListTopAppBar(if(videoId === "bmygzxaV7Hc" || videoId === "WuNTgwaVwZI") stringResource(R.string.lips) else stringResource(R.string.eyes))
+                GlowGetterTopAppBar(if(videoId === "bmygzxaV7Hc" || videoId === "WuNTgwaVwZI") stringResource(R.string.lips) else stringResource(R.string.eyes))
             }
             item {
                 Column {
@@ -137,7 +137,7 @@ fun FaceProductListScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn() {
             item {
-                ProductListTopAppBar(text = stringResource(R.string.face))
+                GlowGetterTopAppBar(text = stringResource(R.string.face))
             }
             if (viewModel.videoId == "c__JPlF5Q7o") {
                 items(1) {
@@ -221,7 +221,7 @@ fun ProductVideoPlayer(
 }
 
 @Composable
-fun ProductListTopAppBar(
+fun GlowGetterTopAppBar(
     text: String,
     modifier: Modifier = Modifier,
 ) {

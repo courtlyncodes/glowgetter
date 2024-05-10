@@ -29,6 +29,8 @@ import com.example.glowgetter.ui.productinfo.DetailScreen
 import com.example.glowgetter.ui.productinfo.EyesLipsProductListScreen
 import com.example.glowgetter.ui.productinfo.FaceProductListScreen
 import com.example.glowgetter.ui.productinfo.FavoritesScreen
+import com.example.glowgetter.ui.productinfo.Glossary
+import com.example.glowgetter.ui.productinfo.Guides
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import com.example.glowgetter.ui.welcomescreen.WelcomeScreen
 
@@ -38,7 +40,9 @@ enum class NavGraph {
     EYES_LIPS,
     FACE,
     DETAIL,
-    FAVORITES
+    FAVORITES,
+    GLOSSARY,
+    GUIDES
 }
 
 enum class AppDestinations {
@@ -60,51 +64,59 @@ fun NavHost(
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
-                item(
-                    icon = {
-                        Icon(Icons.Filled.Home,
-                                contentDescription = stringResource(R.string.home))
-                    },
-                    label = { Text(stringResource(R.string.home)) },
-                    selected = currentDestination == AppDestinations.HOME,
-                    onClick = {
-                        navController.navigate(NavGraph.HOME.name)
-                    }
-                )
-                item(
-                    icon = {
-                        Icon(Icons.Filled.Favorite,
-                            contentDescription = stringResource(R.string.favorites))
-                    },
-                    label = { Text(stringResource(R.string.favorites)) },
-                    selected = currentDestination == AppDestinations.FAVORITES,
-                    onClick = {
-                        navController.navigate(NavGraph.FAVORITES.name)
-                    }
-                )
-                item(
-                    icon = {
-                        Icon(Icons.Filled.Info,
-                            contentDescription = stringResource(R.string.glossary))
-                    },
-                    label = { Text(stringResource(R.string.glossary)) },
-                    selected = currentDestination == AppDestinations.GLOSSARY,
-                    onClick = {
-                        navController.navigate(NavGraph.EYES_LIPS.name)
-                    }
-                )
-                item(
-                    icon = {
-                        Icon(Icons.Filled.Face,
-                            contentDescription = stringResource(R.string.guides_and_tutorials))
-                    },
-                    label = { Text(stringResource(R.string.guides_and_tutorials)) },
-                    selected = currentDestination == AppDestinations.GUIDES,
-                    onClick = {
-                        navController.navigate(NavGraph.DETAIL.name)
-                    }
-                )
-            }
+            item(
+                icon = {
+                    Icon(
+                        Icons.Filled.Home,
+                        contentDescription = stringResource(R.string.home)
+                    )
+                },
+                label = { Text(stringResource(R.string.home)) },
+                selected = currentDestination == AppDestinations.HOME,
+                onClick = {
+                    navController.navigate(NavGraph.HOME.name)
+                }
+            )
+            item(
+                icon = {
+                    Icon(
+                        Icons.Filled.Favorite,
+                        contentDescription = stringResource(R.string.favorites)
+                    )
+                },
+                label = { Text(stringResource(R.string.favorites)) },
+                selected = currentDestination == AppDestinations.FAVORITES,
+                onClick = {
+                    navController.navigate(NavGraph.FAVORITES.name)
+                }
+            )
+            item(
+                icon = {
+                    Icon(
+                        Icons.Filled.Info,
+                        contentDescription = stringResource(R.string.glossary)
+                    )
+                },
+                label = { Text(stringResource(R.string.glossary)) },
+                selected = currentDestination == AppDestinations.GLOSSARY,
+                onClick = {
+                    navController.navigate(NavGraph.GLOSSARY.name)
+                }
+            )
+            item(
+                icon = {
+                    Icon(
+                        Icons.Filled.Face,
+                        contentDescription = stringResource(R.string.guides_and_tutorials)
+                    )
+                },
+                label = { Text(stringResource(R.string.guides_and_tutorials)) },
+                selected = currentDestination == AppDestinations.GUIDES,
+                onClick = {
+                    navController.navigate(NavGraph.GUIDES.name)
+                }
+            )
+        }
     )
     {
         Scaffold { it ->
@@ -269,7 +281,7 @@ fun NavHost(
                         )
                     }
                 }
-                composable(NavGraph.FAVORITES.name){
+                composable(NavGraph.FAVORITES.name) {
                     FavoritesScreen(
                         favoritesList = favoritesUiState.favorites,
                         onProductClick = {
@@ -282,7 +294,13 @@ fun NavHost(
                         favoritesUiState = favoritesUiState
                     )
                 }
+                composable(NavGraph.GLOSSARY.name) {
+                    Glossary(onCardClick = {/*TODO*/ })
+                }
 
+                composable(NavGraph.GUIDES.name) {
+                    Guides()
+                }
             }
         }
     }

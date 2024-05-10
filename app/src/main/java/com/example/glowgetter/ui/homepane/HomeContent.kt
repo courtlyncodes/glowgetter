@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -28,7 +26,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +43,7 @@ import com.example.glowgetter.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
 import com.example.glowgetter.ui.FavoritesUiState
+import com.example.glowgetter.ui.productinfo.GlowGetterTopAppBar
 import kotlinx.coroutines.delay
 
 
@@ -61,15 +59,11 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val products = ProductDataProvider.products
-    val products2 = ProductDataProvider.products.subList(2, 4)
-    val products3 = ProductDataProvider.products.subList(4, 6)
-    val products4 = ProductDataProvider.products.subList(6, 8)
-    val products5 = ProductDataProvider.products.subList(8, 10)
 
     Column() {
         LazyColumn() {
             item {
-                GgTopAppBarHomeScreen()
+                GlowGetterTopAppBar(text = "Hey, your name!")
             }
             item {
                 ProductCategories(
@@ -340,25 +334,25 @@ fun ProductCategories(
         }
     }
 }
-
-@Composable
-fun GgTopAppBarHomeScreen(
-    modifier: Modifier = Modifier,
-) {
-
-   Row(
-       verticalAlignment = Alignment.CenterVertically,
-       modifier = modifier
-           .fillMaxWidth()
-           .background(color = Color(0xFFF6F6F5))
-   ) {
-        Image(
-            painter = painterResource(R.mipmap.top_app_bar_logo),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = modifier.size(100.dp)
-        )
-       Spacer(modifier = modifier.width(20.dp))
-       Text(text = "Hey, Your Name!", modifier = modifier)
-        }
-}
+//
+//@Composable
+//fun GgTopAppBarHomeScreen(
+//    modifier: Modifier = Modifier,
+//) {
+//
+//   Row(
+//       verticalAlignment = Alignment.CenterVertically,
+//       modifier = modifier
+//           .fillMaxWidth()
+//           .background(color = Color(0xFFF6F6F5))
+//   ) {
+//        Image(
+//            painter = painterResource(R.mipmap.top_app_bar_logo),
+//            contentDescription = null,
+//            contentScale = ContentScale.FillBounds,
+//            modifier = modifier.size(100.dp)
+//        )
+//       Spacer(modifier = modifier.width(20.dp))
+//       Text(text = "Hey, Your Name!", modifier = modifier)
+//        }
+//}
