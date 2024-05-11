@@ -11,7 +11,7 @@ object ProductDataProvider {
             name = "Glow Reviver Lip Oil",
             image = "https://media.ulta.com/i/ulta/2615651?w=720&h=720&fmt=webp",
             productType = "lipstick",
-            description = "description",
+            description = "Nourish and hydrate your lips while enhancing your pout's natural glow with e.l.f. Cosmetics' addicting Glow Reviver Lip Oil. The non-sticky formula imbues your pout with a sheer tint of color and glass-like shine while boosting your lips' natural hue.",
             category = "lip_gloss",
             productLink = "https://www.ulta.com/p/glow-reviver-lip-oil-pimprod2042290?cmpid=PS_Non%21google%21PSG_MassCos_elfCosmetics&utm_source=google&utm_medium=paidsearch&CAWELAID=330000200003159406&CATRK=SPFID-1&CAAGID=155710886538&CATCI=kwd-2236618081415&CAPCID=677343984955&CADevice=c&gad_source=1&gclid=Cj0KCQjw_-GxBhC1ARIsADGgDjufE5CUJnQY3hj4gLjRtBBgj2vdsSuMdALsUOatWoJdUgWMYxszSAEaAvgaEALw_wcB&sku=2615652"
         ),
@@ -102,7 +102,7 @@ object ProductDataProvider {
             name = "M·A·Cximal Silky Matte Lipstick",
             image = "https://media.ulta.com/i/ulta/2621407?w=720&h=720&fmt=webp",
             productType = "lipstick",
-            description = "description",
+            description = "M·A·Cximal Silky Matte Lipstick by MAC is a silky-matte lipstick with full-coverage, pigment-rich color and 12 hours of comfortable wear.",
             category = "lipstick",
             productLink = "https://www.ulta.com/p/macximal-silky-matte-lipstick-pimprod2043558?sku=2621439"
         )

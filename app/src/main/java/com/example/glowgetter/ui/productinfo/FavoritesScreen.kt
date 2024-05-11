@@ -23,24 +23,24 @@ fun FavoritesScreen(
     favoritesUiState: FavoritesUiState,
     modifier: Modifier = Modifier
 ) {
-    Column(){
+    Column() {
         Text(
             text = stringResource(R.string.favorites),
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(16.dp)
         )
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(150.dp),
-        modifier = modifier
-    ) {
-        items(favoritesList.size) {
-            ProductItem(
-                product = favoritesList[it],
-                onProductClick = onProductClick,
-                onFavoritesClick = onFavoritesClick,
-                favoritesUiState = favoritesUiState
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(150.dp),
+            modifier = modifier
+        ) {
+            items(favoritesList.size) {
+                ProductItem(
+                    product = favoritesList[it],
+                    onProductClick = onProductClick,
+                    onFavoritesClick = onFavoritesClick,
+                    favoritesUiState = favoritesUiState
+                )
+            }
         }
-    }
     }
 }

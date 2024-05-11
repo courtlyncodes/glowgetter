@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -38,19 +39,19 @@ fun Glossary(onCardClick: (GlossaryItem) -> Unit) {
         GlossaryItem.FINISH_TOUCHES to 4,
         GlossaryItem.BONUS_WORDS to 5
     )
-
-    var selectedItem by remember { mutableStateOf<GlossaryItem?>(null) }
-
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(selectedItem) {
-        if (selectedItem != null) {
-            val scrollToId = itemToSectionIndexMap[selectedItem] ?: 0
-            coroutineScope.launch {
-                rememberScrollState.scrollTo(scrollToId)
-            }
-        }
-    }
+//
+//    var selectedItem by remember { mutableStateOf<GlossaryItem?>(null) }
+//
+//    val coroutineScope = rememberCoroutineScope()
+//
+//    LaunchedEffect(selectedItem) {
+//        if (selectedItem != null) {
+//            val scrollToId = itemToSectionIndexMap[selectedItem] ?: 0
+//            coroutineScope.launch {
+//                rememberScrollState.scrollTo(scrollToId)
+//            }
+//        }
+//    }
 
     LazyColumn(
         modifier = Modifier
@@ -79,7 +80,6 @@ fun Glossary(onCardClick: (GlossaryItem) -> Unit) {
 
         }
     }
-
 
 @Composable
 fun GlossaryCard(item: GlossaryItem, sectionIndex: Int, onCardClick: () -> Unit) {

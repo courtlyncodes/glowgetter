@@ -1,10 +1,11 @@
 package com.example.glowgetter.ui.detailpane
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,36 +17,38 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.glowgetter.ui.homepane.HomeScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glowgetter.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.FavoritesUiState
+import com.example.glowgetter.ui.homepane.HomeScreen
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 
-
-@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun HomeAndCategoryScreen(
     onFirstCardClick: () -> Unit,
@@ -68,8 +71,6 @@ fun HomeAndCategoryScreen(
 ) {
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
     var currentDestination by rememberSaveable { mutableStateOf(DetailList.EYES) }
-    val glowGetterViewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
-    val uiState by viewModel.favoritesUiState.collectAsState()
 
     BackHandler(navigator.canNavigateBack()) {
         navigator.navigateBack()
@@ -123,7 +124,6 @@ fun HomeAndCategoryScreen(
                     onThirdLipsClick = onThirdLipsCardClick
                 )
             }
-            Log.wtf("face", viewModel.productQuery)
         })
 }
 
@@ -137,18 +137,21 @@ fun EyesCategoryDetailPane(
     onSecondCardClick: () -> Unit,
     onThirdCardClick: () -> Unit,
     onFourthCardClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory),
+    paddingValues: PaddingValues = PaddingValues(8.dp),
+    modifier: Modifier = Modifier
 
 ) {
     Scaffold(
         topBar = {
-            DetailPaneTopAppBar(
-                productType = stringResource(R.string.eyes)
-            )
+            Column {
+                DetailPaneTopAppBar(
+                    productType = stringResource(R.string.eyes)
+                )
+            }
+            HorizontalDivider(color = colorResource(R.color.gray))
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(it)) {
+        LazyColumn(modifier = Modifier.padding(paddingValues).padding(it)) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.eyebrow_pencils),
@@ -204,16 +207,22 @@ fun FaceCategoryDetailPane(
     onThirdFaceCardClick: () -> Unit,
     onFourthFaceCardClick: () -> Unit,
     onFifthFaceCardClick: () -> Unit,
+    paddingValues: PaddingValues = PaddingValues(8.dp),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = {
-            DetailPaneTopAppBar(
-                productType = stringResource(R.string.face)
-            )
+            Column {
+                DetailPaneTopAppBar(
+                    productType = stringResource(R.string.face)
+                )
+                HorizontalDivider(color = colorResource(R.color.gray))
+            }
+
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(it)) {
+
+        LazyColumn(modifier = Modifier.padding(paddingValues).padding(it)) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.foundation),
@@ -277,16 +286,21 @@ fun LipsCategoryDetailPane(
     onFirstLipsClick: () -> Unit,
     onSecondLipsClick: () -> Unit,
     onThirdLipsClick: () -> Unit,
+    paddingValues: PaddingValues = PaddingValues(8.dp),
     modifier: Modifier = Modifier
 ) {
     Scaffold(
+
         topBar = {
-            DetailPaneTopAppBar(
-                productType = stringResource(R.string.lips)
-            )
+            Column {
+                DetailPaneTopAppBar(
+                    productType = stringResource(R.string.lips)
+                )
+                HorizontalDivider(color = colorResource(R.color.gray))
+            }
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(it)) {
+        LazyColumn(modifier = Modifier.padding(paddingValues).padding(it)) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_gloss),
@@ -332,9 +346,9 @@ fun CategoryDetailCard(
     Card(
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledContainerColor = MaterialTheme.colorScheme.inversePrimary,
-            disabledContentColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
         )
     ) {
         Column(
@@ -344,14 +358,16 @@ fun CategoryDetailCard(
             Text(
                 text = productType,
                 textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp)
             )
             Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = modifier
                     .fillMaxWidth()
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Image(
                         painter = painterResource(id = painter),
                         contentDescription = painter.toString(),
@@ -360,11 +376,11 @@ fun CategoryDetailCard(
                             .size(150.dp)
                             .aspectRatio(8f / 7f)
                     )
-                }
                 Text(
                     text = description,
+                    style = MaterialTheme.typography.bodyLarge,
                     modifier = modifier
-                        .padding(start = 16.dp, top = 12.dp)
+                        .padding(start = 16.dp)
                         .weight(1f)
                 )
             }
@@ -373,19 +389,32 @@ fun CategoryDetailCard(
     }
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailPaneTopAppBar(
-    productType: String
+    productType: String,
+    modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = productType,
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+
             )
-        }
+        },
+        colors = TopAppBarColors(
+            containerColor = colorResource(id = R.color.light_gray),
+            titleContentColor = colorResource(id = R.color.black),
+            navigationIconContentColor = colorResource(id = R.color.black),
+            actionIconContentColor = colorResource(id = R.color.black),
+            scrolledContainerColor = colorResource(id = R.color.light_gray),
+        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = colorResource(id = R.color.light_gray))
+            .padding(18.dp)
     )
+    HorizontalDivider(color = colorResource(R.color.gray))
 }

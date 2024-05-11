@@ -7,36 +7,41 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
+import coil.request.ImageRequest
+import coil.request.SuccessResult
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.bumptech.glide.Glide
+import com.bumptech.glide.gifdecoder.GifDecoder
 import com.example.glowgetter.Product
 import com.example.glowgetter.R
-import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.FavoritesUiState
+import com.example.glowgetter.ui.ProductListUiState
+import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 import com.example.glowgetter.ui.homepane.ProductItem
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -87,7 +92,7 @@ fun EyesLipsProductListScreen(
     uiState: ProductListUiState
 ) {
     Column {
-        LazyColumn() {
+        LazyColumn {
             item {
                 GlowGetterTopAppBar(if(videoId === "bmygzxaV7Hc" || videoId === "WuNTgwaVwZI") stringResource(R.string.lips) else stringResource(R.string.eyes))
             }
@@ -135,7 +140,7 @@ fun FaceProductListScreen(
     viewModel: GlowGetterViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        LazyColumn() {
+        LazyColumn {
             item {
                 GlowGetterTopAppBar(text = stringResource(R.string.face))
             }
@@ -169,7 +174,7 @@ fun FaceProductListScreen(
                     }
                 }
             }
-            item() {
+            item {
                 Column(modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()) {
@@ -220,61 +225,36 @@ fun ProductVideoPlayer(
     )
 }
 
-@Composable
-fun GlowGetterTopAppBar(
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(color = Color(0xFFF6F6F5))
-    ) {
-        Image(
-            painter = painterResource(R.mipmap.top_app_bar_logo),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = modifier.size(100.dp)
-        )
-        Spacer(modifier = modifier.width(20.dp))
-        Text(text = text)
-    }
-}
 
 @Composable
 fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
-    val gifUrl = "https://raw.githubusercontent.com/courtlyncodes/glowgetter/main/loadinggif.gif"
-    val context = LocalContext.current
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.yooo))
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFFF9FAFC)),
-
-        ) {
-        val view = remember { ImageView(context) }
-
-        DisposableEffect(context) {
-            Glide.with(context)
-                .asGif()
-                .load(gifUrl)
-                .into(view)
-            onDispose {
-                Glide.with(context).clear(view)
-            }
-        }
-        AndroidView(factory = { view })
-    }
+        LottieAnimation(
+            composition = composition,
+            iterations = 4
+        )
 }
 
 @Composable
 fun ErrorScreen(
     modifier: Modifier = Modifier
 ) {
-    Text(text = stringResource(R.string.error), modifier = Modifier
-        .padding(16.dp)
-        .fillMaxSize())
+    Text(
+        text = stringResource(R.string.error),
+        style = MaterialTheme.typography.bodyLarge,
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .padding(16.dp)
+            .fillMaxSize()
+
+    )
+}
+
+@Preview
+@Composable
+fun ProductItemPreview() {
+    ErrorScreen()
 }

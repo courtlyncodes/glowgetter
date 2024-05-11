@@ -30,11 +30,11 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
     private val _favoritesUiState = MutableStateFlow(FavoritesUiState())
     val favoritesUiState: StateFlow<FavoritesUiState> = _favoritesUiState.asStateFlow()
 
-    var productQuery: String = ""
+    private var productQuery: String = ""
     var videoId: String = ""
 
-    var typeQuery: String = ""
-    var subtypeQuery: String = ""
+    private var typeQuery: String = ""
+    private var subtypeQuery: String = ""
 
     var productName: String = ""
 
@@ -55,7 +55,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         getProductListByType(typeQuery, subtypeQuery)
     }
 
-    suspend fun checkImageStatus(imageUrl: String): Boolean {
+    private suspend fun checkImageStatus(imageUrl: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 val connection = java.net.URL(imageUrl).openConnection() as java.net.HttpURLConnection
@@ -70,7 +70,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         }
     }
 
-    fun getProductListByType(type: String , subtype: String) {
+    private fun getProductListByType(type: String, subtype: String) {
         viewModelScope.launch {
             productListUiState = ProductListUiState.Loading
             productListUiState = try {

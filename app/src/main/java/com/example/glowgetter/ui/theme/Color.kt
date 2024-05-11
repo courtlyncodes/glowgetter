@@ -2,9 +2,9 @@ package com.example.glowgetter.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFFA43465)
+val md_theme_light_primary = Color(0xFFA4225B)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFFFD9E3)
+val md_theme_light_primaryContainer = Color(0xFFF8DEE5)
 val md_theme_light_onPrimaryContainer = Color(0xFF3E001F)
 val md_theme_light_secondary = Color(0xFF74565F)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
@@ -12,7 +12,7 @@ val md_theme_light_secondaryContainer = Color(0xFFFFD9E3)
 val md_theme_light_onSecondaryContainer = Color(0xFF2B151D)
 val md_theme_light_tertiary = Color(0xFFA43B33)
 val md_theme_light_onTertiary = Color(0xFFFFFFFF)
-val md_theme_light_tertiaryContainer = Color(0xFFFFDAD6)
+val md_theme_light_tertiaryContainer = Color(0xFFF8DFDC)
 val md_theme_light_onTertiaryContainer = Color(0xFF410002)
 val md_theme_light_error = Color(0xFFBA1A1A)
 val md_theme_light_errorContainer = Color(0xFFFFDAD6)

@@ -33,33 +33,74 @@ val provider = GoogleFont.Provider(
     certificates = R.array.com_google_android_gms_fonts_certs
 )
 
-val fontName = GoogleFont("Lobster Two")
-
-val fontFamily = FontFamily(
-    Font(googleFont = fontName, fontProvider = provider)
+val jostFont = GoogleFont(name = "Jost")
+val jostFontFamily = FontFamily(
+    Font(googleFont = jostFont, fontProvider = provider)
 )
 
-val Typography = Typography(
+val josefinFont = GoogleFont(name = "Josefin Sans")
+val josefinFontFamily = FontFamily(
+    Font(googleFont = josefinFont, fontProvider = provider)
+)
+
+val jostTypography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = jostFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
+        fontSize = 20.sp
     ),
-//     Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
+    bodyMedium = TextStyle(
+        fontFamily = jostFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
         lineHeight = 28.sp,
-        letterSpacing = 0.sp
+        fontSize = 18.sp
+    ),
+    bodySmall = TextStyle(
+        fontFamily = jostFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
+    titleLarge = TextStyle(
+        fontFamily = josefinFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = jostFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 20.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = jostFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    ),
+    labelLarge = TextStyle(
+        fontFamily = jostFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp
+    ),
+    labelMedium = TextStyle(
+        fontFamily = jostFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 12.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = jostFontFamily,
         fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
+        fontSize = 10.sp
+    ),
+    displayMedium =  TextStyle(
+        fontFamily = jostFontFamily,
+        fontSize = 22.sp
+),
+    displaySmall =  TextStyle(
+        fontFamily = jostFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+),
+    displayLarge =  TextStyle(
+        fontFamily = josefinFontFamily,
+        fontSize = 28.sp
+)
 )

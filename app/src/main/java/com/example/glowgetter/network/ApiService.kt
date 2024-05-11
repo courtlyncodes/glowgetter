@@ -9,5 +9,5 @@ interface ApiService {
 
     // Return products by type and its subcategories
     @GET("products.json")
-    suspend fun getProductsByType(@Query("product_type") type: String, @Query("product_category") subtype: String): Response<List<Product>>
+    suspend fun getProductsByType(@Query("product_type") type: String, @Query("product_category") category: String): Response<List<Product>>
 }

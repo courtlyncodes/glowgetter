@@ -54,7 +54,7 @@ enum class AppDestinations {
 
 @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
 @Composable
-fun NavHost(
+fun GlowGetterNavHost(
     viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory),
     navController: NavHostController = rememberNavController(),
 ) {

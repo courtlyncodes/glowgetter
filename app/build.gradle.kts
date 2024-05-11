@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.okhttp)
     // Coil
     implementation(libs.coil.compose)
+    implementation(libs.coil.gif)
     //Glide
     implementation(libs.landscapist.glide)
     // Kotlin Serializer
@@ -86,6 +87,7 @@ dependencies {
     //YouTube player
     implementation(libs.core)
     implementation(libs.lottie.compose)
+    implementation(libs.volley)
 
 
     testImplementation(libs.junit)
