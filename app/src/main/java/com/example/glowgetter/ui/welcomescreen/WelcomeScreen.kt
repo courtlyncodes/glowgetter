@@ -4,9 +4,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,6 +22,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.glowgetter.R
 
@@ -32,7 +35,7 @@ fun WelcomeScreen(
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         modifier = modifier
             .fillMaxSize()
             .background(color = colorResource(id = R.color.white))
@@ -40,7 +43,8 @@ fun WelcomeScreen(
         Text(
             text = stringResource(id = R.string.app_name),
             style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
+            modifier = modifier.padding(top = 40.dp)
         )
         Image(
             painter = painterResource(id = R.mipmap.welcome_screen_graphic),
@@ -59,5 +63,14 @@ fun WelcomeScreen(
            onValueChange = onValueChange,
            singleLine = true
        )
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = stringResource(R.string.get_started))
+        }
     }
+}
+
+@Preview
+@Composable
+fun WelcomeScreenPreview() {
+    WelcomeScreen()
 }

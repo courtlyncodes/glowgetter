@@ -32,6 +32,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,12 +47,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.glowgetter.Product
+import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
+import com.example.glowgetter.ui.AppViewModelProvider
 import com.example.glowgetter.ui.FavoritesUiState
+import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import kotlinx.coroutines.delay
 
 
@@ -105,8 +110,7 @@ fun HomeScreen(
                         ProductItem(
                             product = product,
                             onProductClick = onProductClick,
-                            onFavoritesClick = onFavoritesClick,
-                            favoritesUiState = favoritesUiState
+                            onFavoritesClick = onFavoritesClick
                         )
                     }
                 }
@@ -120,9 +124,10 @@ fun ProductItem(
     product: Product,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
+    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory),
     modifier: Modifier = Modifier
 ) {
+    val favoritesList by viewModel.favoritesList.collectAsState()
     Card(
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -157,7 +162,7 @@ fun ProductItem(
                     ) }
                 Spacer(modifier = modifier.weight(1f))
                 Icon(
-                    if (favoritesUiState.favorites.contains(product)) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                    if (favoritesList.favorites.contains(product)) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                     contentDescription = null,
                     tint = colorResource(id = R.color.red),
                     modifier = Modifier

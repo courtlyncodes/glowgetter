@@ -1,8 +1,5 @@
 package com.example.glowgetter.ui.productinfo
 
-import android.widget.ImageView
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -16,28 +13,19 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
-import coil.request.ImageRequest
-import coil.request.SuccessResult
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.bumptech.glide.Glide
-import com.bumptech.glide.gifdecoder.GifDecoder
-import com.example.glowgetter.Product
+import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.ProductListUiState
@@ -52,7 +40,6 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 fun ProductScreen(
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
     modifier: Modifier = Modifier,
     uiState: ProductListUiState
 ) {
@@ -70,8 +57,7 @@ fun ProductScreen(
                 ProductItem(
                     product = product,
                     onProductClick = onProductClick,
-                    onFavoritesClick = onFavoritesClick,
-                    favoritesUiState = favoritesUiState
+                    onFavoritesClick = onFavoritesClick
                 )
 
             }
@@ -87,7 +73,6 @@ fun EyesLipsProductListScreen(
     lifecycleOwner: LifecycleOwner,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
     modifier: Modifier = Modifier,
     uiState: ProductListUiState
 ) {
@@ -111,8 +96,7 @@ fun EyesLipsProductListScreen(
                     ProductScreen(
                         uiState = uiState,
                         onProductClick = onProductClick,
-                        onFavoritesClick = onFavoritesClick,
-                        favoritesUiState = favoritesUiState
+                        onFavoritesClick = onFavoritesClick
                     )
                 }
             }
@@ -134,7 +118,6 @@ fun FaceProductListScreen(
     onSecondBlushClick: () -> Unit,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
     uiState: ProductListUiState,
     modifier: Modifier = Modifier,
     viewModel: GlowGetterViewModel
@@ -189,7 +172,6 @@ fun FaceProductListScreen(
                     maxItemsInEachRow = 4
                 ) {
                     ProductScreen(
-                        favoritesUiState = favoritesUiState,
                         onProductClick = onProductClick,
                         onFavoritesClick = onFavoritesClick,
                         uiState = uiState
@@ -230,7 +212,7 @@ fun ProductVideoPlayer(
 fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
-    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.yooo))
+        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.yooo))
 
         LottieAnimation(
             composition = composition,

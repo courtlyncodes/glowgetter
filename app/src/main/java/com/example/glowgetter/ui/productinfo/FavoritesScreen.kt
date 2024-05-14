@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.glowgetter.Product
+import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.homepane.ProductItem
@@ -37,8 +37,7 @@ fun FavoritesScreen(
                 ProductItem(
                     product = favoritesList[it],
                     onProductClick = onProductClick,
-                    onFavoritesClick = onFavoritesClick,
-                    favoritesUiState = favoritesUiState
+                    onFavoritesClick = onFavoritesClick
                 )
             }
         }

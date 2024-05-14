@@ -41,7 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.glowgetter.Product
+import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.homepane.HomeScreen

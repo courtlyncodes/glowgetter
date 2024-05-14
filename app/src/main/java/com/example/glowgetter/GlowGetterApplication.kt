@@ -10,6 +10,6 @@ class GlowGetterApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        glowGetterAppContainer = DefaultGlowGetterAppContainer()
+        glowGetterAppContainer = DefaultGlowGetterAppContainer(this)
     }
 }

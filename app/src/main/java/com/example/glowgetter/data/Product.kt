@@ -1,15 +1,14 @@
-package com.example.glowgetter
+package com.example.glowgetter.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-@Serializable
-data class ProductColor(
-    @SerialName("hex_value") val hexValue: String
-)
-
+@Entity(tableName = "products")
 @Serializable
 data class Product (
+    @PrimaryKey
     val id: Int,
     val brand: String?,
     val name: String,
@@ -20,5 +19,5 @@ data class Product (
     val description: String?,
     val category: String?,
     @SerialName("product_type")
-    val productType: String,
+    val productType: String
 )

@@ -19,25 +19,32 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.glowgetter.Product
+import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
+import com.example.glowgetter.ui.AppViewModelProvider
 import com.example.glowgetter.ui.FavoritesUiState
+import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 @Composable
 fun DetailScreen(
     product: Product,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
+    viewModel: GlowGetterViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val favoritesList by viewModel.favoritesList.collectAsState()
+
     LazyColumn(
         modifier = modifier
             .padding(8.dp)
@@ -83,7 +90,7 @@ fun DetailScreen(
                     Row {
                         Spacer(modifier = Modifier.weight(1f))
                         Icon(
-                            if (favoritesUiState.favorites.contains(product)) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            if (favoritesList.favorites.contains(product)) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier

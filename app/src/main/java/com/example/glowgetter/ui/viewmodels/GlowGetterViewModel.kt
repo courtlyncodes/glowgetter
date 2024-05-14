@@ -10,25 +10,30 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.glowgetter.data.GlowGetterRepository
 import com.example.glowgetter.GlowGetterApplication
-import com.example.glowgetter.Product
+import com.example.glowgetter.data.favorites.FavoritesRepository
+import com.example.glowgetter.data.Product
 import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.FavoritesUiState
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import java.io.IOException
 
-class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository) : ViewModel() {
+class GlowGetterViewModel(
+    private val glowGetterRepository: GlowGetterRepository,
+    private val favoritesRepository: FavoritesRepository
+) : ViewModel() {
 
     var productListUiState: ProductListUiState by mutableStateOf(ProductListUiState.Loading)
         private set
 
-    private val _favoritesUiState = MutableStateFlow(FavoritesUiState())
-    val favoritesUiState: StateFlow<FavoritesUiState> = _favoritesUiState.asStateFlow()
+//    private val _favoritesUiState = MutableStateFlow(FavoritesUiState())
+//    val favoritesUiState: StateFlow<FavoritesUiState> = _favoritesUiState.asStateFlow()
 
     private var productQuery: String = ""
     var videoId: String = ""
@@ -40,11 +45,24 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
 
     var product: Product? = null
 
+    val favoritesList: StateFlow<FavoritesUiState> = favoritesRepository.getFavorites().map { FavoritesUiState(it) }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = FavoritesUiState()
+    )
+    var favoritesUiState by mutableStateOf(FavoritesUiState())
+        private set
+
 //    var favoritesList: List<Product> = emptyList()
 
 
     init {
         getProductListByType(typeQuery, subtypeQuery)
+//        viewModelScope.launch {
+//            favoritesList.collect { favorites ->
+//                _favoritesUiState.value = favorites
+//            }
+//        }
     }
 
     fun onTypeQueryChanged(firstQuery: String, secondQuery: String?) {
@@ -55,6 +73,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         getProductListByType(typeQuery, subtypeQuery)
     }
 
+    // Function to check the status of an image URL. If the image URL returns a valid response code, it returns true.
     private suspend fun checkImageStatus(imageUrl: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
@@ -79,6 +98,7 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
                 if (productList == null) {
                     ProductListUiState.Error
                 } else {
+                    // Filter out products with invalid images
                     val validProducts = productList.filter { product ->
                         checkImageStatus(product.image)
                     }
@@ -92,14 +112,28 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
         }
     }
 
-    fun updateFavoritesList(product: Product) {
-        val updatedFavorites = _favoritesUiState.value.favorites.toMutableList()
-        if (updatedFavorites.contains(product)) {
-            updatedFavorites.remove(product)
-        } else {
-            updatedFavorites.add(product)
+//    fun updateFavoritesList(product: Product) {
+//        val updatedFavorites = _favoritesUiState.value.favorites.toMutableList()
+//        if (updatedFavorites.contains(product)) {
+//            updatedFavorites.remove(product)
+//        } else {
+//            updatedFavorites.add(product)
+//        }
+//        _favoritesUiState.value = _favoritesUiState.value.copy(favorites = updatedFavorites)
+//    }
+     fun updateFavoritesUiState(favorites: List<Product>) {
+        favoritesUiState = FavoritesUiState(favorites)
+    }
+    suspend fun addProductToFavorites(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesRepository.addFavorite(product)
         }
-        _favoritesUiState.value = _favoritesUiState.value.copy(favorites = updatedFavorites)
+    }
+
+    suspend fun removeProductFromFavorites(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesRepository.removeFavorite(product)
+        }
     }
 
     fun updateProductCategory(category: String) {
@@ -125,8 +159,9 @@ class GlowGetterViewModel(private val glowGetterRepository: GlowGetterRepository
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
                         as GlowGetterApplication)
                 val glowGetterRepository = application.glowGetterAppContainer.glowGetterRepository
-                GlowGetterViewModel(glowGetterRepository = glowGetterRepository)
+                GlowGetterViewModel(glowGetterRepository = glowGetterRepository, favoritesRepository = application.glowGetterAppContainer.favoritesRepository)
             }
         }
     }
 }
+

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,6 +34,7 @@ import com.example.glowgetter.ui.productinfo.Glossary
 import com.example.glowgetter.ui.productinfo.Guides
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import com.example.glowgetter.ui.welcomescreen.WelcomeScreen
+import kotlinx.coroutines.launch
 
 enum class NavGraph {
     WELCOME,
@@ -60,7 +62,8 @@ fun GlowGetterNavHost(
 ) {
     val startDestination: String = NavGraph.HOME.name
     val currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
-    val favoritesUiState by viewModel.favoritesUiState.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    val favoritesList by viewModel.favoritesList.collectAsState()
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -87,6 +90,7 @@ fun GlowGetterNavHost(
                 label = { Text(stringResource(R.string.favorites)) },
                 selected = currentDestination == AppDestinations.FAVORITES,
                 onClick = {
+                    viewModel.updateFavoritesUiState(favoritesList.favorites)
                     navController.navigate(NavGraph.FAVORITES.name)
                 }
             )
@@ -208,9 +212,16 @@ fun GlowGetterNavHost(
                             navController.navigate(NavGraph.DETAIL.name)
                         },
                         onFavoritesClick = {
-                            viewModel.updateFavoritesList(it)
+                            coroutineScope.launch {
+                                if(viewModel.favoritesUiState.favorites.contains(it)) {
+                                    viewModel.removeProductFromFavorites(it)
+                                }
+                                else
+                                    viewModel.addProductToFavorites(it)
+                            }
+                            viewModel.updateFavoritesUiState(favoritesList.favorites)
                         },
-                        favoritesUiState = favoritesUiState
+                        favoritesUiState = viewModel.favoritesUiState
                     )
 
                 }
@@ -225,9 +236,16 @@ fun GlowGetterNavHost(
                             navController.navigate(NavGraph.DETAIL.name)
                         },
                         onFavoritesClick = {
-                            viewModel.updateFavoritesList(it)
-                        },
-                        favoritesUiState = favoritesUiState
+                            coroutineScope.launch {
+                                if(viewModel.favoritesUiState.favorites.contains(it)) {
+                                    viewModel.removeProductFromFavorites(it)
+
+                                    }
+                                else
+                                    viewModel.addProductToFavorites(it)
+                            }
+                            viewModel.updateFavoritesUiState(favoritesList.favorites)
+                        }
                     )
                 }
                 composable(NavGraph.FACE.name) {
@@ -263,9 +281,15 @@ fun GlowGetterNavHost(
                             navController.navigate(NavGraph.DETAIL.name)
                         },
                         onFavoritesClick = {
-                            viewModel.updateFavoritesList(it)
+                          coroutineScope.launch {
+                              if(viewModel.favoritesUiState.favorites.contains(it)) {
+                                  viewModel.removeProductFromFavorites(it)
+                              }
+                              else
+                                  viewModel.addProductToFavorites(it)
+                          }
+                            viewModel.updateFavoritesUiState(favoritesList.favorites)
                         },
-                        favoritesUiState = favoritesUiState,
                         viewModel = viewModel,
                         uiState = viewModel.productListUiState
                     )
@@ -275,23 +299,36 @@ fun GlowGetterNavHost(
                         DetailScreen(
                             product = product,
                             onFavoritesClick = {
-                                viewModel.updateFavoritesList(it)
-                            },
-                            favoritesUiState = favoritesUiState
+                                    coroutineScope.launch {
+                                        if(viewModel.favoritesUiState.favorites.contains(it)) {
+                                            viewModel.removeProductFromFavorites(it)
+                                        }
+                                        else
+                                            viewModel.addProductToFavorites(it)
+                                    }
+                                    viewModel.updateFavoritesUiState(favoritesList.favorites)
+                            }
                         )
                     }
                 }
                 composable(NavGraph.FAVORITES.name) {
                     FavoritesScreen(
-                        favoritesList = favoritesUiState.favorites,
+                        favoritesList = favoritesList.favorites,
                         onProductClick = {
                             viewModel.updateProduct(it)
                             navController.navigate(NavGraph.DETAIL.name)
                         },
                         onFavoritesClick = {
-                            viewModel.updateFavoritesList(it)
+                            coroutineScope.launch {
+                                if(viewModel.favoritesUiState.favorites.contains(it)) {
+                                    viewModel.removeProductFromFavorites(it)
+                                }
+                                else
+                                    viewModel.addProductToFavorites(it)
+                            }
+                            viewModel.updateFavoritesUiState(favoritesList.favorites)
                         },
-                        favoritesUiState = favoritesUiState
+                        favoritesUiState = viewModel.favoritesUiState
                     )
                 }
                 composable(NavGraph.GLOSSARY.name) {
