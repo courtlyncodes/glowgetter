@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -27,7 +28,6 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
-import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 import com.example.glowgetter.ui.homepane.ProductItem
@@ -123,13 +123,17 @@ fun FaceProductListScreen(
     viewModel: GlowGetterViewModel
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        LazyColumn {
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             item {
                 GlowGetterTopAppBar(text = stringResource(R.string.face))
             }
             if (viewModel.videoId == "c__JPlF5Q7o") {
                 items(1) {
-                    FlowRow(maxItemsInEachRow = 2) {
+                    FlowRow(
+                        maxItemsInEachRow = 2
+                    ) {
                         Button(onClick = onFirstFoundationClick) {
                             Text(text = stringResource(R.string.liquid_foundation))
                         }
@@ -212,11 +216,13 @@ fun ProductVideoPlayer(
 fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.yooo))
+        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading_gif))
 
         LottieAnimation(
             composition = composition,
-            iterations = 4
+            iterations = 4,
+            modifier = modifier
+                .padding(4.dp)
         )
 }
 
@@ -233,10 +239,4 @@ fun ErrorScreen(
             .fillMaxSize()
 
     )
-}
-
-@Preview
-@Composable
-fun ProductItemPreview() {
-    ErrorScreen()
 }

@@ -14,7 +14,7 @@ object AppViewModelProvider {
         initializer {
             GlowGetterViewModel(
                 glowGetterApplication().glowGetterAppContainer.glowGetterRepository,
-                glowGetterApplication().glowGetterAppContainer.favoritesRepository
+                glowGetterApplication().glowGetterAppContainer.favoritesRepository,
             )
         }
 

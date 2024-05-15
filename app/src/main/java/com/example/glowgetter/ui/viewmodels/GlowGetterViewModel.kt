@@ -13,10 +13,11 @@ import com.example.glowgetter.GlowGetterApplication
 import com.example.glowgetter.data.favorites.FavoritesRepository
 import com.example.glowgetter.data.Product
 import com.example.glowgetter.ui.ProductListUiState
-import com.example.glowgetter.ui.FavoritesUiState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -32,8 +33,11 @@ class GlowGetterViewModel(
     var productListUiState: ProductListUiState by mutableStateOf(ProductListUiState.Loading)
         private set
 
-//    private val _favoritesUiState = MutableStateFlow(FavoritesUiState())
-//    val favoritesUiState: StateFlow<FavoritesUiState> = _favoritesUiState.asStateFlow()
+    var favoritesUiState by mutableStateOf(FavoritesUiState())
+        private set
+
+//    var userUiState by mutableStateOf(UserUiState())
+//        private set
 
     private var productQuery: String = ""
     var videoId: String = ""
@@ -45,24 +49,26 @@ class GlowGetterViewModel(
 
     var product: Product? = null
 
-    val favoritesList: StateFlow<FavoritesUiState> = favoritesRepository.getFavorites().map { FavoritesUiState(it) }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = FavoritesUiState()
-    )
-    var favoritesUiState by mutableStateOf(FavoritesUiState())
-        private set
+    val favoritesList: StateFlow<FavoritesUiState> =
+        favoritesRepository.getFavorites().map { FavoritesUiState(it) }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = FavoritesUiState()
+        )
+//
+//    private val _userUiState = MutableStateFlow(UserUiState()) // Initial state
+//    val userUiState: StateFlow<UserUiState> = _userUiState.asStateFlow() // Make it immutable
 
-//    var favoritesList: List<Product> = emptyList()
 
+    private val _username = MutableStateFlow("")
+    val username: StateFlow<String> = _username.asStateFlow()
+
+    fun setUsername(newUsername: String) {
+        _username.value = newUsername
+    }
 
     init {
         getProductListByType(typeQuery, subtypeQuery)
-//        viewModelScope.launch {
-//            favoritesList.collect { favorites ->
-//                _favoritesUiState.value = favorites
-//            }
-//        }
     }
 
     fun onTypeQueryChanged(firstQuery: String, secondQuery: String?) {
@@ -77,7 +83,8 @@ class GlowGetterViewModel(
     private suspend fun checkImageStatus(imageUrl: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
-                val connection = java.net.URL(imageUrl).openConnection() as java.net.HttpURLConnection
+                val connection =
+                    java.net.URL(imageUrl).openConnection() as java.net.HttpURLConnection
                 connection.requestMethod = "HEAD"
                 val statusCode = connection.responseCode
                 statusCode == java.net.HttpURLConnection.HTTP_OK
@@ -112,30 +119,8 @@ class GlowGetterViewModel(
         }
     }
 
-//    fun updateFavoritesList(product: Product) {
-//        val updatedFavorites = _favoritesUiState.value.favorites.toMutableList()
-//        if (updatedFavorites.contains(product)) {
-//            updatedFavorites.remove(product)
-//        } else {
-//            updatedFavorites.add(product)
-//        }
-//        _favoritesUiState.value = _favoritesUiState.value.copy(favorites = updatedFavorites)
-//    }
-     fun updateFavoritesUiState(favorites: List<Product>) {
-        favoritesUiState = FavoritesUiState(favorites)
-    }
-    suspend fun addProductToFavorites(product: Product) {
-        viewModelScope.launch(Dispatchers.IO) {
-            favoritesRepository.addFavorite(product)
-        }
-    }
 
-    suspend fun removeProductFromFavorites(product: Product) {
-        viewModelScope.launch(Dispatchers.IO) {
-            favoritesRepository.removeFavorite(product)
-        }
-    }
-
+    // Product UI state management
     fun updateProductCategory(category: String) {
         productQuery = category
     }
@@ -152,6 +137,34 @@ class GlowGetterViewModel(
         this.product = product
     }
 
+    // Favorites UI state management
+    fun updateFavoritesUiState(favorites: List<Product>) {
+        favoritesUiState = FavoritesUiState(favorites)
+    }
+
+    suspend fun addProductToFavorites(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesRepository.addFavorite(product)
+        }
+    }
+
+    suspend fun removeProductFromFavorites(product: Product) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesRepository.removeFavorite(product)
+        }
+    }
+
+    // User UI state management
+
+//    suspend fun addUserName(username: String) {
+//        _username.value = _username.value.copy(username = username)
+//    }
+
+
+//    fun updateUserUiState(username: String) {
+//        _username.update { it.copy(username = username) } // Update username in existing state
+//    }
+
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -159,9 +172,18 @@ class GlowGetterViewModel(
                 val application = (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY]
                         as GlowGetterApplication)
                 val glowGetterRepository = application.glowGetterAppContainer.glowGetterRepository
-                GlowGetterViewModel(glowGetterRepository = glowGetterRepository, favoritesRepository = application.glowGetterAppContainer.favoritesRepository)
+                GlowGetterViewModel(
+                    glowGetterRepository = glowGetterRepository,
+                    favoritesRepository = application.glowGetterAppContainer.favoritesRepository
+                )
             }
         }
     }
 }
+data class FavoritesUiState(
+    val favorites: List<Product> = emptyList()
+)
 
+data class UserUiState(
+    val username: String = ""
+)

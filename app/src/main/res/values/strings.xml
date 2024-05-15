@@ -8,10 +8,8 @@
     <string name="categories">categories</string>
     <string name="favorites">Favorites</string>
     <string name="guides">guides</string>
-    <string name="find">Find</string>
-    <string name="your_glow">Your Glow</string>
     <string name="eyebrow_pencils">Eyebrow Pencils</string>
-    <string name="enter_name">Enter your name below</string>
+    <string name="enter_name">Enter your name</string>
     <string name="lip_gloss">Lip Gloss</string>
     <string name="lip_liner">Lip Liner</string>
     <string name="mascara">Mascara</string>
@@ -45,8 +43,8 @@
     <string name="powder_foundation">Powder Foundation</string>
     <string name="powder_blush">Powder</string>
     <string name="cream_blush">Cream</string>
-    <string name="store_locator">Store Locator</string>
     <string name="guides_and_tutorials">Guides</string>
     <string name="glossary">Glossary</string>
     <string name="get_started">Go Find Your Glow!</string>
+    <string name="continue_without_account">Continue Without Account</string>
 </resources>

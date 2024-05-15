@@ -54,7 +54,6 @@ import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
 import com.example.glowgetter.ui.AppViewModelProvider
-import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import kotlinx.coroutines.delay
 
@@ -62,21 +61,23 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun HomeScreen(
+    username: String,
     onEyesClick: () -> Unit,
     onFaceClick: () -> Unit,
     onLipsClick: () -> Unit,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: GlowGetterViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val products = ProductDataProvider.products
+    val usernameState by viewModel.username.collectAsState()
 
     Column {
         LazyColumn {
             item {
                 Column{
-                    GlowGetterTopAppBar(text = "Hey, your name!")
+                    GlowGetterTopAppBar(text = if(usernameState.isEmpty()) "Welcome!" else "Hey, ${username}!")
                 }
             }
             item {

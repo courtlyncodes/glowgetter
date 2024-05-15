@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import com.example.glowgetter.data.Product
 
 @Database(entities = [Product::class], version = 1)
-//@TypeConverters(LocalDateConverter::class)
 abstract class FavoritesDatabase : RoomDatabase() {
     abstract fun favoritesDao(): FavoritesDao
 

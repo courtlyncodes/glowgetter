@@ -32,7 +32,6 @@ import coil.request.ImageRequest
 import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.AppViewModelProvider
-import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 @Composable

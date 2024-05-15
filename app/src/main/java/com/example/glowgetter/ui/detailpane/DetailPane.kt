@@ -43,14 +43,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
-import com.example.glowgetter.ui.FavoritesUiState
 import com.example.glowgetter.ui.homepane.HomeScreen
+import com.example.glowgetter.ui.viewmodels.FavoritesUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 
 @OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun HomeAndCategoryScreen(
+    username: String,
     onFirstCardClick: () -> Unit,
     onSecondCardClick: () -> Unit,
     onThirdCardClick: () -> Unit,
@@ -80,6 +81,7 @@ fun HomeAndCategoryScreen(
         value = navigator.scaffoldValue,
         listPane = {
             HomeScreen(
+                username = username,
                 onEyesClick = {
                 currentDestination = DetailList.EYES
                 viewModel.updateProductCategory("eyes")
@@ -96,9 +98,7 @@ fun HomeAndCategoryScreen(
                 navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
             },
                 onProductClick = onProductClick,
-                onFavoritesClick = onFavoritesClick,
-                favoritesUiState = favoritesUiState,
-
+                onFavoritesClick = onFavoritesClick
             )
         },
         detailPane = {
