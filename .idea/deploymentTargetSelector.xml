@@ -4,25 +4,29 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-05-10T20:08:45.153642Z">
+        <DropdownSelection timestamp="2024-05-17T19:54:26.575027Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/courtlynb/.android/avd/Pixel_7_Pro_API_32.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/courtlynb/.android/avd/7.6_Fold-in_with_outer_display_API_34.avd" />
             </handle>
           </Target>
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="HomePanePreview">
+      <SelectionState runConfigName="homePane_displaysCarousel()">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2024-04-29T14:28:13.919510Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=/Users/courtlynb/.android/avd/Pixel_7_Pro_API_32.avd" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
+      </SelectionState>
+      <SelectionState runConfigName="homePane_displaysPopularProducts()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="carousel_displaysPhotos()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="homePane_displaysUserName()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="homePanePopularProducts_displaysProductDetails()">
+        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>

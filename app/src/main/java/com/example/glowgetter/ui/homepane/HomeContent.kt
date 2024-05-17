@@ -1,5 +1,6 @@
 package com.example.glowgetter.ui.homepane
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,11 +48,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.helper.widget.Carousel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
+import com.example.glowgetter.data.model.CarouselImage
 import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import kotlinx.coroutines.delay
@@ -186,9 +189,9 @@ fun ProductCarousel(
 ) {
     // List of photos to loop through
     val photos = listOf(
-        R.mipmap.lipstick,
-        R.mipmap.eyeshadow,
-        R.mipmap.foundation
+        CarouselImage(R.mipmap.lipstick, stringResource(R.string.lipstick)),
+        CarouselImage(R.mipmap.eyeshadow, stringResource(R.string.eyeshadow)),
+        CarouselImage(R.mipmap.foundation, stringResource(R.string.foundation))
     )
     val pageCount = photos.size
     val pagerState = rememberPagerState(initialPage = 0, pageCount = { 100 })
@@ -209,15 +212,17 @@ fun ProductCarousel(
         modifier = modifier.padding(bottom = 16.dp)
     ) { index ->
         val page = index % pageCount
+
         Image(
-            painter = painterResource(photos[page]),
-            contentDescription = photos[page].toString(),
+            painter = painterResource(id = photos[page].id),
+            contentDescription = photos[page].name,
             contentScale = ContentScale.Crop,
             modifier = modifier
                 .aspectRatio(7f / 3f)
                 .shadow(16.dp)
                 .clip(RoundedCornerShape(4.dp))
         )
+        Log.wtf("content des", photos[page].toString())
     }
 }
 
