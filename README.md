@@ -1,5 +1,5 @@
 # Glow Getter - Makeup Finder App for Beginners
-Glow Getter is a web-based makeup finder app designed specifically for beginners. Whether you're just starting your makeup journey or looking to explore new products, Glow Getter has you covered. With a user-friendly interface and comprehensive features, finding the perfect makeup products has never been easier.
+Glow Getter is an Android-based makeup finder app designed specifically for beginners. Whether you're just starting your makeup journey or looking to explore new products, Glow Getter has you covered. With a user-friendly interface and comprehensive features, finding the perfect makeup products has never been easier.
 
 ## Key Features
 - Product Search: Easily find makeup products by categories such as eyes, face, and lips and even their subcategories.
