@@ -1,14 +1,13 @@
 package com.example.glowgetter
 
+import android.util.Log
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
@@ -19,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -73,8 +71,7 @@ fun GlowGetterNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = startDestination,
-//                modifier = Modifier.padding(it)
+        startDestination = startDestination
     ) {
         composable(NavGraph.WELCOME.name) {
             WelcomeScreen(
@@ -83,6 +80,7 @@ fun GlowGetterNavHost(
                     viewModel.setUsername(it)
                 },
                 onWelcomeClick = {
+                    if(username.isNotEmpty())
                     navController.navigate(NavGraph.APP.name)
                 },
                 onContinueClick = {
@@ -97,7 +95,6 @@ fun GlowGetterNavHost(
                 productName = viewModel.productName,
                 uiState = viewModel.productListUiState,
                 onProductClick = {
-//                    viewModel.updateProduct(product)
                     navController.navigate(NavGraph.DETAIL.name)
                 },
                 onFavoritesClick = {
@@ -194,8 +191,9 @@ fun GlowGetterNavHost(
             {
                 when (currentDestination) {
                     AppDestinations.HOME -> {
+                        Log.wtf("username home", username)
                         HomeAndCategoryScreen(
-                            username = username,
+                            username = if(username.isEmpty()) "Welcome" else "Hey, $username!",
                             onFirstCardClick =
                             {
                                 viewModel.onTypeQueryChanged("eyebrow", null)
@@ -281,8 +279,7 @@ fun GlowGetterNavHost(
                                         viewModel.addProductToFavorites(it)
                                 }
                                 viewModel.updateFavoritesUiState(favoritesList.favorites)
-                            },
-                            favoritesUiState = viewModel.favoritesUiState
+                            }
                         )
                     }
                     AppDestinations.FAVORITES -> {

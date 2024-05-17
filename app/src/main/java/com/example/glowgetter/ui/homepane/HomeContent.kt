@@ -50,10 +50,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
 import com.example.glowgetter.data.ProductDataProvider
-import com.example.glowgetter.ui.AppViewModelProvider
+import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import kotlinx.coroutines.delay
 
@@ -67,17 +66,15 @@ fun HomeScreen(
     onLipsClick: () -> Unit,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: GlowGetterViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    modifier: Modifier = Modifier
 ) {
     val products = ProductDataProvider.products
-    val usernameState by viewModel.username.collectAsState()
 
     Column {
         LazyColumn {
             item {
-                Column{
-                    GlowGetterTopAppBar(text = if(usernameState.isEmpty()) "Welcome!" else "Hey, ${username}!")
+                Column {
+                    GlowGetterTopAppBar(text = username)
                 }
             }
             item {
@@ -98,7 +95,7 @@ fun HomeScreen(
                             .fillMaxWidth()
                             .padding(8.dp),
                         textAlign = TextAlign.Center
-                        )
+                    )
                 }
             }
             item {
@@ -125,8 +122,8 @@ fun ProductItem(
     product: Product,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
 ) {
     val favoritesList by viewModel.favoritesList.collectAsState()
     Card(
@@ -160,7 +157,8 @@ fun ProductItem(
                         it,
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.primary,
-                    ) }
+                    )
+                }
                 Spacer(modifier = modifier.weight(1f))
                 Icon(
                     if (favoritesList.favorites.contains(product)) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
@@ -174,7 +172,7 @@ fun ProductItem(
             Text(
                 product.name,
                 style = MaterialTheme.typography.labelLarge,
-                )
+            )
         }
     }
 }

@@ -1,6 +1,6 @@
 package com.example.glowgetter.data.favorites
 
-import com.example.glowgetter.data.Product
+import com.example.glowgetter.data.model.Product
 import kotlinx.coroutines.flow.Flow
 
 class OfflineFavoritesRepository(private val favoritesDao: FavoritesDao): FavoritesRepository {

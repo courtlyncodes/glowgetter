@@ -1,6 +1,6 @@
 package com.example.glowgetter.network
 
-import com.example.glowgetter.data.Product
+import com.example.glowgetter.data.model.Product
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

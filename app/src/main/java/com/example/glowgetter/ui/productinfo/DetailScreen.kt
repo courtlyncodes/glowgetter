@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
+import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.ui.AppViewModelProvider
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
@@ -38,8 +38,8 @@ import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 fun DetailScreen(
     product: Product,
     onFavoritesClick: (Product) -> Unit,
-    viewModel: GlowGetterViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: GlowGetterViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val context = LocalContext.current
     val favoritesList by viewModel.favoritesList.collectAsState()
@@ -58,13 +58,13 @@ fun DetailScreen(
                     style = MaterialTheme.typography.titleMedium,
                     modifier = modifier
                         .clickable {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.productLink))
-                        context.startActivity(intent)
-                    }
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(product.productLink))
+                            context.startActivity(intent)
+                        }
 
                 )
                 product.brand?.let {
-                    Text (
+                    Text(
                         it,
                         style = MaterialTheme.typography.labelLarge,
                         color = colorResource(R.color.dark_gray),
@@ -117,7 +117,7 @@ fun DetailScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = modifier
                         .padding(8.dp)
-                    )
+                )
             }
         }
     }

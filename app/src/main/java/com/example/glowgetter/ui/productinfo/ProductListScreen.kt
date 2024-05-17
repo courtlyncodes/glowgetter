@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,16 +23,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
+import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.ui.ProductListUiState
 import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 import com.example.glowgetter.ui.homepane.ProductItem
@@ -92,7 +89,11 @@ fun EyesLipsProductListScreen(
             modifier = Modifier.weight(1f)
         ) {
             item {
-                GlowGetterTopAppBar(if(videoId === "bmygzxaV7Hc" || videoId === "WuNTgwaVwZI") stringResource(R.string.lips) else stringResource(R.string.eyes))
+                GlowGetterTopAppBar(
+                    if (videoId === "bmygzxaV7Hc" || videoId === "WuNTgwaVwZI") stringResource(
+                        R.string.lips
+                    ) else stringResource(R.string.eyes)
+                )
             }
             item {
                 Column(
@@ -234,7 +235,7 @@ fun FaceProductListScreen(
                             .fillMaxWidth()
                             .padding(8.dp),
                         textAlign = TextAlign.Center
-                        )
+                    )
                 }
             }
             items(count = 1) {
@@ -291,14 +292,14 @@ fun ProductVideoPlayer(
 fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
-        val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading_gif))
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.loading_gif))
 
-        LottieAnimation(
-            composition = composition,
-            iterations = 4,
-            modifier = modifier
-                .padding(4.dp)
-        )
+    LottieAnimation(
+        composition = composition,
+        iterations = 4,
+        modifier = modifier
+            .padding(4.dp)
+    )
 }
 
 @Composable

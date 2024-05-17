@@ -41,10 +41,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.glowgetter.data.Product
 import com.example.glowgetter.R
+import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.ui.homepane.HomeScreen
-import com.example.glowgetter.ui.viewmodels.FavoritesUiState
 import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 
 
@@ -66,7 +65,6 @@ fun HomeAndCategoryScreen(
     onThirdLipsCardClick: () -> Unit,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
-    favoritesUiState: FavoritesUiState,
     modifier: Modifier = Modifier,
     viewModel: GlowGetterViewModel = viewModel(factory = GlowGetterViewModel.Factory)
 ) {
@@ -83,20 +81,20 @@ fun HomeAndCategoryScreen(
             HomeScreen(
                 username = username,
                 onEyesClick = {
-                currentDestination = DetailList.EYES
-                viewModel.updateProductCategory("eyes")
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            },
+                    currentDestination = DetailList.EYES
+                    viewModel.updateProductCategory("eyes")
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
                 onFaceClick = {
-                currentDestination = DetailList.FACE
-                viewModel.updateProductCategory("face")
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            },
+                    currentDestination = DetailList.FACE
+                    viewModel.updateProductCategory("face")
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
                 onLipsClick = {
-                currentDestination = DetailList.LIPS
-                viewModel.updateProductCategory("lips")
-                navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-            },
+                    currentDestination = DetailList.LIPS
+                    viewModel.updateProductCategory("lips")
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
                 onProductClick = onProductClick,
                 onFavoritesClick = onFavoritesClick
             )
@@ -137,9 +135,8 @@ fun EyesCategoryDetailPane(
     onSecondCardClick: () -> Unit,
     onThirdCardClick: () -> Unit,
     onFourthCardClick: () -> Unit,
-    paddingValues: PaddingValues = PaddingValues(8.dp),
-    modifier: Modifier = Modifier
-
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(8.dp)
 ) {
     Scaffold(
         topBar = {
@@ -151,7 +148,9 @@ fun EyesCategoryDetailPane(
             HorizontalDivider(color = colorResource(R.color.gray))
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(paddingValues).padding(it)) {
+        LazyColumn(modifier = Modifier
+            .padding(paddingValues)
+            .padding(it)) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.eyebrow_pencils),
@@ -207,8 +206,8 @@ fun FaceCategoryDetailPane(
     onThirdFaceCardClick: () -> Unit,
     onFourthFaceCardClick: () -> Unit,
     onFifthFaceCardClick: () -> Unit,
-    paddingValues: PaddingValues = PaddingValues(8.dp),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(8.dp)
 ) {
     Scaffold(
         topBar = {
@@ -222,13 +221,15 @@ fun FaceCategoryDetailPane(
         }
     ) {
 
-        LazyColumn(modifier = Modifier.padding(paddingValues).padding(it)) {
+        LazyColumn(modifier = Modifier
+            .padding(paddingValues)
+            .padding(it)) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.foundation),
                     painter = R.mipmap.liquid_foundation,
                     description = stringResource(R.string.foundation_des),
-                    modifier = modifier.clickable { onFirstFaceCardClick ()}
+                    modifier = modifier.clickable { onFirstFaceCardClick() }
 
 
                 )
@@ -241,7 +242,7 @@ fun FaceCategoryDetailPane(
                     productType = stringResource(R.string.blush),
                     painter = R.mipmap.blush,
                     description = stringResource(R.string.blush_des),
-                    modifier = modifier.clickable { onSecondFaceCardClick ()}
+                    modifier = modifier.clickable { onSecondFaceCardClick() }
                 )
             }
             item {
@@ -263,7 +264,7 @@ fun FaceCategoryDetailPane(
                     productType = stringResource(R.string.contour),
                     painter = R.mipmap.contour,
                     description = stringResource(R.string.contour_des),
-                    modifier = modifier.clickable { onFourthFaceCardClick ()}
+                    modifier = modifier.clickable { onFourthFaceCardClick() }
                 )
             }
             item {
@@ -274,7 +275,7 @@ fun FaceCategoryDetailPane(
                     productType = stringResource(R.string.highlighter),
                     painter = R.mipmap.highlighter,
                     description = stringResource(R.string.highlighter_des),
-                    modifier = modifier.clickable { onFifthFaceCardClick ()}
+                    modifier = modifier.clickable { onFifthFaceCardClick() }
                 )
             }
         }
@@ -286,11 +287,10 @@ fun LipsCategoryDetailPane(
     onFirstLipsClick: () -> Unit,
     onSecondLipsClick: () -> Unit,
     onThirdLipsClick: () -> Unit,
+    modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(8.dp),
-    modifier: Modifier = Modifier
 ) {
     Scaffold(
-
         topBar = {
             Column {
                 DetailPaneTopAppBar(
@@ -300,7 +300,9 @@ fun LipsCategoryDetailPane(
             }
         }
     ) {
-        LazyColumn(modifier = Modifier.padding(paddingValues).padding(it)) {
+        LazyColumn(modifier = Modifier
+            .padding(paddingValues)
+            .padding(it)) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_gloss),
@@ -345,7 +347,7 @@ fun CategoryDetailCard(
 ) {
     Card(
         colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
             disabledContainerColor = Color.Transparent,
             disabledContentColor = Color.Transparent
@@ -368,14 +370,14 @@ fun CategoryDetailCard(
                 modifier = modifier
                     .fillMaxWidth()
             ) {
-                    Image(
-                        painter = painterResource(id = painter),
-                        contentDescription = painter.toString(),
-                        contentScale = ContentScale.Crop,
-                        modifier = modifier
-                            .size(150.dp)
-                            .aspectRatio(8f / 7f)
-                    )
+                Image(
+                    painter = painterResource(id = painter),
+                    contentDescription = painter.toString(),
+                    contentScale = ContentScale.Crop,
+                    modifier = modifier
+                        .size(150.dp)
+                        .aspectRatio(8f / 7f)
+                )
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodyLarge,

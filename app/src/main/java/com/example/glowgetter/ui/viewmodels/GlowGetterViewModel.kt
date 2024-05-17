@@ -8,10 +8,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.glowgetter.data.GlowGetterRepository
 import com.example.glowgetter.GlowGetterApplication
+import com.example.glowgetter.data.GlowGetterRepository
 import com.example.glowgetter.data.favorites.FavoritesRepository
-import com.example.glowgetter.data.Product
+import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.ui.ProductListUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -161,10 +161,7 @@ class GlowGetterViewModel(
         }
     }
 }
+
 data class FavoritesUiState(
     val favorites: List<Product> = emptyList()
-)
-
-data class UserUiState(
-    val username: String = ""
 )

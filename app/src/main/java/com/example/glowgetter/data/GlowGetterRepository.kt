@@ -1,5 +1,6 @@
 package com.example.glowgetter.data
 
+import com.example.glowgetter.data.model.Product
 import com.example.glowgetter.network.ApiService
 
 interface GlowGetterRepository {

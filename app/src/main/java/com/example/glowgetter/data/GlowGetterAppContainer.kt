@@ -28,8 +28,6 @@ class DefaultGlowGetterAppContainer(private val context: Context) : GlowGetterAp
         OfflineFavoritesRepository(FavoritesDatabase.getDatabase(context).favoritesDao())
     }
 
-
-
     //Use the Retrofit builder to build a retrofit object using a kotlinx.serialization converter
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))

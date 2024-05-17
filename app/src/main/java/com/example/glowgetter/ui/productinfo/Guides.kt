@@ -34,7 +34,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
@@ -43,7 +42,7 @@ import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 @Composable
 fun Guides(
     onBackClick: () -> Unit
-){
+) {
     val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
     var currentDestination by rememberSaveable { mutableStateOf(DetailPane.BRUSHES) }
 
@@ -55,28 +54,28 @@ fun Guides(
         directive = navigator.scaffoldDirective,
         value = navigator.scaffoldValue,
         listPane = {
-                   GuideList(
-                       onBrushClick = {
-                           currentDestination = DetailPane.BRUSHES
-                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                      },
-                       onEyeshadowClick = {
-                           currentDestination = DetailPane.EYESHADOW
-                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                          },
-                       onLipsClick = {
-                           currentDestination = DetailPane.LIPS
-                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                     },
-                       onCHClick = {
-                           currentDestination = DetailPane.CONTOUR_HIGHLIGHT
-                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                                   },
-                       onFoundationClick = {
-                           currentDestination = DetailPane.FOUNDATION
-                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
-                       }
-                   )
+            GuideList(
+                onBrushClick = {
+                    currentDestination = DetailPane.BRUSHES
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
+                onEyeshadowClick = {
+                    currentDestination = DetailPane.EYESHADOW
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
+                onLipsClick = {
+                    currentDestination = DetailPane.LIPS
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
+                onCHClick = {
+                    currentDestination = DetailPane.CONTOUR_HIGHLIGHT
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                },
+                onFoundationClick = {
+                    currentDestination = DetailPane.FOUNDATION
+                    navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                }
+            )
         },
         detailPane = {
             when (currentDestination) {
@@ -85,8 +84,8 @@ fun Guides(
                 DetailPane.LIPS -> LipsGuide()
                 DetailPane.CONTOUR_HIGHLIGHT -> ContourHighlightGuide()
                 DetailPane.FOUNDATION -> FoundationGuide()
-                }
             }
+        }
     )
 }
 
@@ -113,15 +112,15 @@ fun GuideList(
                 .padding(8.dp)
         )
 
-    GuideButtons(
-        onBrushClick = onBrushClick,
-        onEyeshadowClick = onEyeshadowClick,
-        onLipsClick = onLipsClick,
-        onCHClick = onCHClick,
-        onFoundationClick = onFoundationClick,
-        modifier = Modifier
-            .padding(20.dp)
-    )
+        GuideButtons(
+            onBrushClick = onBrushClick,
+            onEyeshadowClick = onEyeshadowClick,
+            onLipsClick = onLipsClick,
+            onCHClick = onCHClick,
+            onFoundationClick = onFoundationClick,
+            modifier = Modifier
+                .padding(20.dp)
+        )
     }
 }
 
@@ -188,7 +187,7 @@ fun BrushesGuide(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
-                )
+            )
             Image(
                 painter = painterResource(id = R.mipmap.brushes),
                 contentDescription = null,
@@ -196,7 +195,7 @@ fun BrushesGuide(modifier: Modifier = Modifier) {
                 modifier = modifier
                     .aspectRatio(1f)
                     .clip(RoundedCornerShape(4.dp))
-                )
+            )
         }
     }
 }
@@ -269,6 +268,7 @@ fun LipsGuide(modifier: Modifier = Modifier) {
 
     }
 }
+
 @Composable
 fun ContourHighlightGuide(modifier: Modifier = Modifier) {
     LazyColumn(

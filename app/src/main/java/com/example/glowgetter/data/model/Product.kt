@@ -1,4 +1,4 @@
-package com.example.glowgetter.data
+package com.example.glowgetter.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
