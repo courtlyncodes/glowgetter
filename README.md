@@ -6,29 +6,34 @@ Glow Getter is a web-based makeup finder app designed specifically for beginners
 - Save Favorites: Save your favorite products for quick access later.
 - Makeup Guides and Tutorials: Access a wide range of makeup guides and tutorials to help you master your makeup skills.
 - Glossary: Explore a glossary of makeup terms to expand your beauty knowledge.
+- Responsive Design: The app is adaptive to different screen sizes, ensuring an optimal user experience on both desktop and mobile devices.
+
+![Screenshot 2024-05-17 at 3 53 49 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/3fab5864-bfb1-43d5-b7fc-5864bf022c6d)
+![Screenshot 2024-05-17 at 3 54 06 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/e6458061-3f4f-459a-a9c5-ffa8dac2076e)
+![Screenshot 2024-05-17 at 3 56 09 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/69c897d0-e27c-4c53-95ab-4ab5085bdeeb)
+![Screenshot 2024-05-17 at 3 57 34 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/3b8769cb-f9e1-4b59-bd28-95c03ff4ba00)
+
 
 ## Installation Instructions
-Ready to dive into the fabulous world of Glow Getter? Here's how you can get started:
+To begin using Glow Getter, please follow the instructions below:
 
-### Option 1: Use the Emulator (No Makeup Brush Required!)
-Want to test the app without any setup fuss? Use our deployed emulator and start your Glow Getter journey in seconds. Simply click here to access the emulator and let the makeup magic begin!
+### Option 1: Use the Emulator
+To test the application without any setup, use our deployed emulator. [Click here to access the emulator](https://shorturl.at/mssZA) and start your Glow Getter journey. 
 
-### Option 2: Fork and Run with Android Studio (For the Tech-Savvy Glam Enthusiasts)
-Feeling adventurous and tech-savvy? You can fork the Glow Getter repository and run it using Android Studio. Follow these steps:
+### Option 2: Fork and Run with Android Studio
+For those who are comfortable with technical setups, you can fork the Glow Getter repository and run it using Android Studio. Follow these steps:
 
-1. Fork the Repository: Head over to our GitHub page and fork the Glow Getter repository to your account.
-2. Clone the Repo: Open your terminal and run:
-```git clone https://github.com/your-username/glow-getter.git```
-3. Open in Android Studio: Fire up Android Studio and open the cloned project.
-4. Build and Run: Hit that run button and watch the Glow Getter app come to life on your emulator or device.
-   
-And voila! You're all set to explore the dazzling features of Glow Getter.
+1. Fork the Repository: Visit our GitHub page and fork the Glow Getter repository to your account.
+2. Clone the Repository: Open your terminal and execute: ```git clone https://github.com/your-username/glow-getter.git```
+3. Open in Android Studio: Launch Android Studio and open the cloned project.
+4. Build and Run: Build and run the project on your emulator or device.
 
 ## Usage Guide
-1. Welcome Screen: Upon launching the app, you'll be greeted with a fabulous welcome screen. Think of it as the red carpet to your makeup adventure! Pop in your name to personalize your Glow Getter experience. It's like getting your own makeup artist's chair!
-2. Browse Categories: Ready to explore? Click on the __Eyes, Face, or Lips__ categories. It's like walking into your favorite makeup store, but better!
-3. Explore Subcategories: Dive deeper into subcategories to find that perfect mascara, foundation, or lipstick. It's like a treasure hunt for beauty gems!
-4. Add to Favorites: Found a product that makes your heart skip a beat? Click the "Add to Favorites" button to save it for later. Your personalized beauty stash awaits!
-5. Product Details: Curious about a product? Click on it to view all the deets and get whisked away to its site for purchase. Shop 'til you drop, darling!
-6. Makeup Guides and Tutorials: Need a little guidance? Our makeup guides and tutorials are like having a pro makeup artist by your side. Learn new techniques and discover the products you need to achieve the look!
-7. Glossary: Stumped by a makeup term? Use our glossary to decode the beauty jargon and become a makeup maven in no time!
+1. **Welcome Screen**: Upon launching the app, you'll be greeted with a welcome screen. Enter your name to personalize your experience.
+2. **Browse Categories**: Click on the eyes, face, or lips categories to start browsing makeup products.
+3. **Explore Subcategories**: Dive deeper into subcategories to find specific types of products.
+4. **Add to Favorites**: Found a product you love? Simply click the "Add to Favorites" button to save it for later.
+5. **Product Details**: Click on individual products to view more details and be directed to its site for purchase.
+6. **Makeup Guides and Tutorials**: Explore makeup guides and tutorials to learn about different makeup techniques and the products needed.
+7. **Glossary**: Use the glossary to look up makeup terms and expand your knowledge about different products and techniques.
+
