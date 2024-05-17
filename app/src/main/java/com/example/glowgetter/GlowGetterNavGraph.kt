@@ -40,15 +40,11 @@ import com.example.glowgetter.ui.welcomescreen.WelcomeScreen
 import kotlinx.coroutines.launch
 
 enum class NavGraph {
-                    APP,
+    APP,
     WELCOME,
-    HOME,
     EYES_LIPS,
     FACE,
     DETAIL,
-    FAVORITES,
-    GLOSSARY,
-    GUIDES
 }
 
 enum class AppDestinations(
@@ -100,8 +96,8 @@ fun GlowGetterNavHost(
                 lifecycleOwner = LocalLifecycleOwner.current,
                 productName = viewModel.productName,
                 uiState = viewModel.productListUiState,
-                onProductClick = { product ->
-                    viewModel.updateProduct(product)
+                onProductClick = {
+//                    viewModel.updateProduct(product)
                     navController.navigate(NavGraph.DETAIL.name)
                 },
                 onFavoritesClick = {
@@ -304,21 +300,21 @@ fun GlowGetterNavHost(
                                         viewModel.addProductToFavorites(it)
                                 }
                                 viewModel.updateFavoritesUiState(favoritesList.favorites)
-                            }
+                            },
+                            onBackClick = { navController.navigate(AppDestinations.HOME.name) }
+                        )
+                    }
+                    AppDestinations.GLOSSARY -> {
+                        Glossary(
+                            onBackClick = { navController.navigate(NavGraph.APP.name) })
+                    }
+                    AppDestinations.GUIDES -> {
+                        Guides(
+                            onBackClick = { navController.navigate(NavGraph.APP.name) }
                         )
                     }
 
-                    AppDestinations.GLOSSARY -> {
-                        Glossary(onCardClick = {/*TODO*/ })
-                    }
-
-                    AppDestinations.GUIDES -> {
-                        Guides()
-                    }
-
                 }
-
-
             }
         }
     }

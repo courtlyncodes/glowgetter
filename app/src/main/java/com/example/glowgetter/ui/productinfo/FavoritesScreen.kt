@@ -21,10 +21,12 @@ fun FavoritesScreen(
     favoritesList: List<Product>,
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-
+    BackHandler {
+        onBackClick()
+    }
     Column() {
         GlowGetterTopAppBar(text = stringResource(R.string.favorites))
         LazyVerticalGrid(

@@ -1,103 +1,217 @@
 package com.example.glowgetter.ui.productinfo
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.glowgetter.R
 import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Glossary(onCardClick: (GlossaryItem) -> Unit) {
-    val rememberScrollState = rememberScrollState()
-
-    val itemToSectionIndexMap = mapOf(
-        GlossaryItem.FACE_STUFF to 0,
-        GlossaryItem.EYE_CANDY to 1,
-        GlossaryItem.LIP_SERVICE to 2,
-        GlossaryItem.BRUSH_BUDDIES to 3,
-        GlossaryItem.FINISH_TOUCHES to 4,
-        GlossaryItem.BONUS_WORDS to 5
-    )
-//
-//    var selectedItem by remember { mutableStateOf<GlossaryItem?>(null) }
-//
-//    val coroutineScope = rememberCoroutineScope()
-//
-//    LaunchedEffect(selectedItem) {
-//        if (selectedItem != null) {
-//            val scrollToId = itemToSectionIndexMap[selectedItem] ?: 0
-//            coroutineScope.launch {
-//                rememberScrollState.scrollTo(scrollToId)
-//            }
-//        }
-//    }
+fun Glossary(
+    onBackClick: () -> Unit
+) {
+    BackHandler {
+        onBackClick()
+    }
+    val scrollState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
 
     LazyColumn(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        state = scrollState,
         modifier = Modifier
-            .padding(16.dp)
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
     ) {
-        item{
-            Column{
-                GlowGetterTopAppBar(text = "Makeup Glossary for Beginners")
+        item {
+            Column {
+                GlowGetterTopAppBar(text = stringResource(R.string.glossary_top_app_bar))
                 Text(
-                    "Feeling lost in a land of brushes and powders? Don't worry, this glossary is your magic decoder ring for the world of makeup!"
+                    stringResource(R.string.glossary_intro),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .padding(8.dp)
                 )
             }
         }
         item {
-            Column {
-                FaceStuff()
-                EyeCandy()
-                LipService()
-                BrushBuddies()
-                FinishingTouches()
-                BonusWords()
-
+            GlossaryButtons(scrollState)
+        }
+        item {
+            FaceStuff()
+        }
+        item {
+            EyeCandy()
+        }
+        item {
+            LipService()
+        }
+        item {
+            BrushBuddies()
+        }
+        item {
+            FinishingTouches()
+        }
+        item {
+            BonusWords()
+        }
+    }
+    AnimatedVisibility(visible = !scrollState.isScrollingUp(), enter = fadeIn(), exit = fadeOut()) {
+        GoToTop {
+            scope.launch {
+                scrollState.scrollToItem(0)
             }
         }
+    }
+}
 
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+fun GlossaryButtons(
+    scrollState: LazyListState,
+    modifier: Modifier = Modifier
+) {
+    val scope = rememberCoroutineScope()
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        modifier = modifier
+            .padding(8.dp)
+    ) {
+        GlossaryButton(stringResource(R.string.face_stuff)) {
+            scope.launch { scrollState.animateScrollToItem(2) }
+        }
+        Spacer(modifier = modifier.weight(1f))
+        GlossaryButton(stringResource(R.string.lip_service)) {
+            scope.launch { scrollState.animateScrollToItem(4) }
+        }
+        Spacer(modifier = modifier.weight(1f))
+        GlossaryButton(stringResource(R.string.finishing_touches)) {
+            scope.launch { scrollState.animateScrollToItem(6) }
         }
     }
-
-@Composable
-fun GlossaryCard(item: GlossaryItem, sectionIndex: Int, onCardClick: () -> Unit) {
-    Card(
-        onClick = onCardClick,
-        modifier = Modifier.padding(8.dp)
+    Row(
+        horizontalArrangement = Arrangement.SpaceAround,
+        modifier = modifier
+            .padding(8.dp)
     ) {
-        Text(item.title)
+        GlossaryButton(stringResource(R.string.eye_candy)) {
+            scope.launch { scrollState.animateScrollToItem(3) }
+        }
+        Spacer(modifier = modifier.weight(1f))
+        GlossaryButton(stringResource(R.string.brush_buddies)) {
+            scope.launch { scrollState.animateScrollToItem(5) }
+        }
+        Spacer(modifier = modifier.weight(1f))
+        GlossaryButton(stringResource(R.string.bonus_words)) {
+            scope.launch { scrollState.animateScrollToItem(8) }
+        }
     }
 }
 
 @Composable
-fun FaceStuff() {
-    Column {
-        Text(text = "Face Stuff")
+fun GoToTop(goToTop: () -> Unit) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        FloatingActionButton(
+            onClick = goToTop,
+            content = {
+                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Scroll to Top")
+            },
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+
+        )
+    }
+}
+
+@Composable
+fun GlossaryButton(
+    text: String,
+    onClick: () -> Unit,
+) {
+    Card(
+        onClick = onClick,
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
+        ),
+        modifier = Modifier
+            .width(125.dp)
+    ) {
+        Text(
+            text,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+                .padding(8.dp)
+        )
+    }
+}
+
+
+@Composable
+fun FaceStuff(modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(8.dp)) {
+        Text(
+            text = "${stringResource(R.string.face_stuff)} \uD83D\uDE18",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
         faceItems.forEach { item ->
             Text(
-                text = "• $item",
+                text = "• ${stringResource(item)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
             )
         }
@@ -105,12 +219,22 @@ fun FaceStuff() {
 }
 
 @Composable
-fun EyeCandy() {
-    Column {
-        Text(text = "Eye Candy")
+fun EyeCandy(modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(8.dp)) {
+        Text(
+            text = "${stringResource(R.string.eye_candy)} \uD83D\uDE0E",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
         eyeItems.forEach { item ->
             Text(
-                text = "• $item",
+                text = "• ${stringResource(item)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
             )
         }
@@ -118,12 +242,22 @@ fun EyeCandy() {
 }
 
 @Composable
-fun LipService() {
-    Column {
-        Text(text = "Lip Service")
+fun LipService(modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(8.dp)) {
+        Text(
+            text = "${stringResource(R.string.lip_service)} \uD83E\uDEE6",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
         lipsItems.forEach { item ->
             Text(
-                text = "• $item",
+                text = "• ${stringResource(item)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
             )
         }
@@ -131,12 +265,22 @@ fun LipService() {
 }
 
 @Composable
-fun BrushBuddies() {
-    Column {
-        Text(text = "Brush Buddies")
+fun BrushBuddies(modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(8.dp)) {
+        Text(
+            text = "${stringResource(R.string.brush_buddies)} \uD83D\uDD8C\uFE0F",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
         brushItems.forEach { item ->
             Text(
-                text = "• $item",
+                text = "• ${stringResource(item)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
             )
         }
@@ -144,12 +288,22 @@ fun BrushBuddies() {
 }
 
 @Composable
-fun FinishingTouches() {
-    Column {
-        Text(text = "Finishing Touches")
+fun FinishingTouches(modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(8.dp)) {
+        Text(
+            text = "${stringResource(R.string.finishing_touches)} \uD83E\uDE9E",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
         finishItems.forEach { item ->
             Text(
-                text = "• $item",
+                text = "• ${stringResource(item)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
             )
         }
@@ -157,70 +311,92 @@ fun FinishingTouches() {
 }
 
 @Composable
-fun BonusWords() {
-    Column {
-        Text(text = "Bonus Words")
+fun BonusWords(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.padding(
+            start = 8.dp,
+            top = 8.dp,
+            end = 8.dp,
+            bottom = 60.dp
+        )
+    ) {
+        Text(
+            text = "${stringResource(R.string.bonus_words)} \uD83D\uDC85",
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Bold,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            textAlign = TextAlign.Center
+        )
         bonusItems.forEach { item ->
             Text(
-                text = "• $item",
+                text = "• ${stringResource(item)}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
                 modifier = Modifier.padding(8.dp)
             )
         }
     }
+}
+
+@Composable
+fun LazyListState.isScrollingUp(): Boolean {
+    var previousIndex by remember(this) { mutableStateOf(firstVisibleItemIndex) }
+    var previousScrollOffset by remember(this) { mutableStateOf(firstVisibleItemScrollOffset) }
+    return remember(this) {
+        derivedStateOf {
+            if (previousIndex != firstVisibleItemIndex) {
+                previousIndex > firstVisibleItemIndex
+            } else {
+                previousScrollOffset >= firstVisibleItemScrollOffset
+            }.also {
+                previousIndex = firstVisibleItemIndex
+                previousScrollOffset = firstVisibleItemScrollOffset
+            }
+        }
+    }.value
 }
 
 val faceItems = listOf(
-    "Foundation: Your skin's BFF, this evens out your tone and creates a flawless canvas (think of it as Instagram for your face, but in real life).",
-    "Primer: Like double-sided tape for makeup, this helps everything stick and makes your masterpiece last longer.",
-    "Concealer: Your secret weapon against dark circles, blemishes, and anything else trying to steal your glow.",
-    "Powder: This sets your foundation like a boss, keeping you shine-free and camera-ready.",
-    "Highlighter: Basically a tiny disco ball for your face, it catches light and makes your cheekbones, nose, and cupid's bow pop.",
-    "Bronzer: Think sunkissed skin without the sunburn! This adds warmth and can even be used to fake some sculpting (hello, cheekbones!).",
-    "Blush: A rosy kiss of color for your cheeks, because who doesn't love a healthy flush?",
-    "Contour: Contouring uses darker shades to define your facial features and create a more sculpted look."
+    R.string.face_items_foundation,
+    R.string.face_items_primer,
+    R.string.face_items_concealer,
+    R.string.face_items_powder,
+    R.string.face_items_highlighter,
+    R.string.face_items_bronzer,
+    R.string.face_items_blush,
+    R.string.face_items_contour
 )
 
 val eyeItems = listOf(
-    "Eyeshadow: Like painting for your eyelids, this comes in a million colors and finishes to create endless looks.",
-    "Eyeliner: This bad boy defines your eyes, making them look bigger and brighter. Think of it as the eyeliner flick that completes your superhero persona.",
-    "Mascara: Lashes on fleek? This lengthens, thickens, and darkens your lashes for a dramatic (or natural) eye look.",
-    "Brow Pomade/Pencil: Your brows are the frames for your face! This helps you fill them in and create the perfect shape.",
-    "Eyelash Curler: This little tool gives your lashes a dramatic lift, making your eyes appear bigger and brighter."
+    R.string.eye_items_eyeshadow,
+    R.string.eye_items_eyeliner,
+    R.string.eye_items_mascara,
+    R.string.eye_items_brows,
+    R.string.eye_items_eyelash_curler
 )
 
-val lipsItems = listOf (
-    "Lipstick: The classic way to add a pop of color to your lips. It comes in every shade imaginable, so find your perfect pout!",
-    "Lip Gloss: Think of it as chapstick with a dazzling personality. It adds shine and dimension to your lips, making them look plumper and juicier.",
-    "Lip Liner: This defines the shape of your lips and helps prevent lipstick from bleeding. Think of it as a coloring book for your lips, keeping things neat and tidy."
+val lipsItems = listOf(
+    R.string.lip_items_lipstick,
+    R.string.lip_items_lip_gloss,
+    R.string.lip_items_lipliner
 )
 
-val brushItems = listOf (
-    "Makeup Brushes: Different brushes have different jobs! Some are for applying, some for blending, some for precise work. Think of them as your trusty paintbrushes for creating a masterpiece.",
-    "Makeup Sponge: This bouncy little friend helps blend out liquid and cream products for a seamless, airbrushed finish."
+val brushItems = listOf(
+    R.string.brush_items_brushes,
+    R.string.brush_items_sponge
 )
 
-val finishItems = listOf (
-    "Matte: No shine, all business. Perfect for oily skin or a natural look.",
-    "Dewy: Think fresh, radiant skin! Like you just walked off a beach vacation.",
-    "Satin: The best of both worlds! Subtle sheen for a glow without disco ball vibes."
+val finishItems = listOf(
+    R.string.finishing_items_matte,
+    R.string.finishing_items_dewy,
+    R.string.finishing_items_satin
 )
 
-val bonusItems = listOf (
-    "Dupe: Not your BFF's actual lipstick (don't be weird!), but a more affordable product that's practically its twin. Score!",
-    "Natural Makeup: No clown makeup here! This look enhances your natural beauty, like a subtle filter for real life.",
-    "Full Coverage: Need to hide the evidence of that late-night pizza party? This makeup completely covers imperfections for a flawless finish.",
-    "Setting Spray: The superhero cape for your makeup! This mist helps it stay put all day, so you can conquer the world without worrying about smudging."
+val bonusItems = listOf(
+    R.string.bonus_items_dupe,
+    R.string.bonus_items_natural,
+    R.string.bonus_items_full_coverage,
+    R.string.bonus_items_setting_spray
 )
-enum class GlossaryItem(val title: String) {
-    FACE_STUFF("Face Stuff"),
-    EYE_CANDY("Eye Candy"),
-    LIP_SERVICE("Lip Service"),
-    BRUSH_BUDDIES("Brush Buddies"),
-    FINISH_TOUCHES("Finishing Touches"),
-    BONUS_WORDS("Bonus Words")
-}
-@Preview
-@Composable
-fun GlossaryPreview() {
-    Glossary(onCardClick = {})
-}

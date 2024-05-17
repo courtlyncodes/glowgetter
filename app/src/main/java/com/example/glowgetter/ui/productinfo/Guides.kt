@@ -1,96 +1,348 @@
 package com.example.glowgetter.ui.productinfo
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.glowgetter.R
 import com.example.glowgetter.ui.homepane.GlowGetterTopAppBar
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
-fun Guides() {
-    LazyColumn {
-        item {
-            Column {
-                GlowGetterTopAppBar("Makeup Guides and Cheat Sheets")
-                Text(text = "Feeling lost in a land of brushes and powders? Don't worry, these makeup guides and cheat sheets are your magic decoder ring for the world of makeup! ✨")
+fun Guides(
+    onBackClick: () -> Unit
+){
+    val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+    var currentDestination by rememberSaveable { mutableStateOf(DetailPane.BRUSHES) }
+
+    BackHandler {
+        onBackClick()
+    }
+
+    ListDetailPaneScaffold(
+        directive = navigator.scaffoldDirective,
+        value = navigator.scaffoldValue,
+        listPane = {
+                   GuideList(
+                       onBrushClick = {
+                           currentDestination = DetailPane.BRUSHES
+                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                                      },
+                       onEyeshadowClick = {
+                           currentDestination = DetailPane.EYESHADOW
+                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                                          },
+                       onLipsClick = {
+                           currentDestination = DetailPane.LIPS
+                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                                     },
+                       onCHClick = {
+                           currentDestination = DetailPane.CONTOUR_HIGHLIGHT
+                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                                   },
+                       onFoundationClick = {
+                           currentDestination = DetailPane.FOUNDATION
+                           navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                       }
+                   )
+        },
+        detailPane = {
+            when (currentDestination) {
+                DetailPane.BRUSHES -> BrushesGuide()
+                DetailPane.EYESHADOW -> EyeshadowGuide()
+                DetailPane.LIPS -> LipsGuide()
+                DetailPane.CONTOUR_HIGHLIGHT -> ContourHighlightGuide()
+                DetailPane.FOUNDATION -> FoundationGuide()
+                }
             }
+    )
+}
+
+@Composable
+fun GuideList(
+    onBrushClick: () -> Unit,
+    onEyeshadowClick: () -> Unit,
+    onLipsClick: () -> Unit,
+    onCHClick: () -> Unit,
+    onFoundationClick: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        GlowGetterTopAppBar(stringResource(R.string.guides_top_app_bar))
+        Text(
+            text = stringResource(R.string.guides_intro),
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .padding(8.dp)
+        )
+
+    GuideButtons(
+        onBrushClick = onBrushClick,
+        onEyeshadowClick = onEyeshadowClick,
+        onLipsClick = onLipsClick,
+        onCHClick = onCHClick,
+        onFoundationClick = onFoundationClick,
+        modifier = Modifier
+            .padding(20.dp)
+    )
+    }
+}
+
+@Composable
+fun GuideButtons(
+    onBrushClick: () -> Unit,
+    onEyeshadowClick: () -> Unit,
+    onLipsClick: () -> Unit,
+    onCHClick: () -> Unit,
+    onFoundationClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface)
+    ) {
+        GuideButton(stringResource(R.string.brushes), onBrushClick)
+        GuideButton(stringResource(R.string.eyeshadow), onEyeshadowClick)
+        GuideButton(stringResource(R.string.lips), onLipsClick)
+        GuideButton(stringResource(R.string.contouring_and_highlighters), onCHClick)
+        GuideButton(stringResource(R.string.foundation), onFoundationClick)
+    }
+}
+
+@Composable
+fun GuideButton(
+    text: String,
+    onClick: () -> Unit,
+) {
+    Card(
+        onClick = onClick,
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
+            disabledContainerColor = Color.Transparent,
+            disabledContentColor = Color.Transparent
+        ),
+        modifier = Modifier
+            .width(300.dp)
+    ) {
+        Text(
+            text,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentSize(Alignment.Center)
+                .padding(8.dp)
+        )
+    }
+}
+
+@Composable
+fun BrushesGuide(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        GlowGetterTopAppBar(stringResource(R.string.brushes))
+        Column(modifier = Modifier.padding(8.dp)) {
+            Text(
+                text = stringResource(R.string.guides_brushes),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier.padding(8.dp)
+                )
+            Image(
+                painter = painterResource(id = R.mipmap.brushes),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = modifier
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(4.dp))
+                )
+        }
+    }
+}
+
+@Composable
+fun EyeshadowGuide(modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        item {
+            GlowGetterTopAppBar(stringResource(R.string.eyeshadow))
         }
         item {
-            Column {
-                Text(text = "Brushes")
-                Text(text = "Brushes got you feeling overwhelmed? Don't fret, makeup newbie! Real Techniques and EcoTools offer amazing quality at wallet-friendly prices. Want to level up your brush game? Morphe and e.l.f. have a vast selection for all your blending, buffing, and bronzing needs. Now go forth and conquer the makeup world, one fluffy brush at a time!")
-                Image(painter = painterResource(id = R.mipmap.brushes), contentDescription = null)
-            }
-        }
-        item {
-            Column {
-                Text(text = "Eyeshadow")
+            Column(modifier = Modifier.padding(8.dp)) {
                 Text(
-                    text = "Feeling lost in the land of eyeshadow, eyeliner, and brows? Don't sweat it, makeup newbie! Drugstore brands like Wet n Wild, Maybelline, and e.l.f. offer fantastic (and affordable!) options. We're talking pigmented eyeshadow palettes in every shade imaginable, smooth eyeliners for precise lines, and brow pencils or gels to tame those arches. Time to ditch the makeup struggle and create stunning eye looks that won't break the bank!\n If you want to step up your makeup game, dive into the world of higher-end brands!  Sephora's got your back with cult-favorites like Urban Decay's Naked palettes (a must-have for any eyeshadow enthusiast) and Fenty Beauty's Fly Pencil eyeliner for effortless definition.  Ulta boasts Too Faced's Born This Way Super Brow for natural-looking brows and Tarte's Tartelette in Bloom Clay Eyeshadow Palette, packed with gorgeous, blendable shades.  Get ready to experience the luxurious quality and pigment payoff these brands offer, and watch your eye looks transform!"
+                    text = stringResource(R.string.guides_eyeshadow1),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
                 )
                 Image(
                     painter = painterResource(R.mipmap.eye_application),
-                    contentDescription = null
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.size(400.dp)
                 )
-            }
-        }
-        item {
-            Column {
-                Text(text = "Lips")
-                Text(text = "Lip goals without breaking the bank? We got you! Drugstore darlings like NYX Professional Makeup offer a fantastic selection of lip products.  NYX Slide On Lip Pencils line your lips with creamy color that stays put, while their Butter Gloss delivers a high-shine finish with a hint of color. Craving a liquid lipstick that won't dry out your lips? Milani's Matte Liquid Lipsticks come in a vast array of shades and offer impressive staying power at a budget-friendly price.  For a universally flattering lip balm with a hint of tint, check out e.l.f. Cosmetics' Tinted Lip Balm - it's perfect for everyday wear!  Get ready to rock luscious lips without sacrificing your savings!")
-                Image(
-                    painter = painterResource(id = R.mipmap.lips_application),
-                    contentDescription = null
-                )
-            }
-        }
-        item {
-            Column {
-                Text(text = "Contouring and Highlighters")
                 Text(
-                    text = "Wanna sculpt and glow like a celeb, but without the celeb budget? No problem!\n" +
-                            "\n" +
-                            "Drugstore Duos:  Wet n Wild's MegaGlo Contour Palette offers buildable shades for sculpting and highlighting, while Milani's Baked Multitasking Makeup Stick lets you contour and highlight on the go!\n" +
-                            "\n" +
-                            "Mid-Range Marvels:  For a step up, e.l.f.'s Putty Primer is a fantastic base for your contour and highlight, while Maybelline's Face Studio Master Contour Palette provides a range of blendable shades for a natural-looking definition.\n" +
-                            "\n" +
-                            "High-End Hues:  Ready to splurge?  Sephora's Fenty Beauty Match Stix Skinstick lets you customize your contour and highlight shades for a flawless finish, while NARS' Radiant Creamy Concealer is a cult-favorite for brightening under eyes and highlighting cheekbones."
-                )
-                Image(
-                    painter = painterResource(id = R.mipmap.countour_highlight),
-                    contentDescription = null
-                )
-            }
-        }
-        item {
-            Column {
-                Text(text = "Foundation")
-                Text(
-                    text = "Face feeling bare? Foundation to the rescue!\n" +
-                            "\n" +
-                            "Drugstore Deliverance: Maybelline's Fit Me Matte + Poreless Foundation offers lightweight, buildable coverage for oily and normal skin, while L'Oreal's Infallible Pro-Matte Foundation tackles shine and provides full coverage for those who need it most.\n" +
-                            "\n" +
-                            "Mid-Range Must-Haves:  For a dewy, radiant finish, e.l.f.'s Flawless Finish Foundation is a steal, while NYX Professional Makeup's Born This Way Foundation offers medium, buildable coverage that feels like a second skin.\n" +
-                            "\n" +
-                            "High-End Holy Grails:  Sephora beckons with Fenty Beauty's Pro Filt'r Soft Matte Longwear Foundation, a favorite for its long-lasting, weightless matte finish in a massive shade range.  Ulta boasts Lancôme's Teint Idole Ultra Long Wear Foundation, offering full coverage and a flawless finish that lasts all day.\n" +
-                            "\n" +
-                            "Find your perfect foundation match, no matter your skin type or budget, and get ready to rock a flawless base!"
-                )
-                Image(
-                    painter = painterResource(id = R.mipmap.foundation_application),
-                    contentDescription = null
+                    text = stringResource(R.string.guides_eyeshadow2),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
                 )
             }
         }
     }
 }
 
-@Preview
 @Composable
-fun GuidesPreview() {
-    Guides()
+fun LipsGuide(modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        item {
+            GlowGetterTopAppBar(stringResource(R.string.lips))
+        }
+        item {
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = stringResource(R.string.guides_lips1),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.mipmap.lips_application),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.size(400.dp)
+                )
+                Text(
+                    text = stringResource(R.string.guides_lips2),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+
+    }
+}
+@Composable
+fun ContourHighlightGuide(modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        item {
+            GlowGetterTopAppBar(stringResource(R.string.contouring_and_highlighters))
+        }
+        item {
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = stringResource(R.string.guides_contouring_highlighting1),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.mipmap.countour_highlight),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier.size(400.dp)
+                )
+                Text(
+                    text = stringResource(R.string.guides_contouring_highlighting2),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+
+    }
+}
+
+@Composable
+fun FoundationGuide(modifier: Modifier = Modifier) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        item {
+            GlowGetterTopAppBar(stringResource(R.string.foundation))
+        }
+        item {
+            Column(modifier = Modifier.padding(8.dp)) {
+                Text(
+                    text = stringResource(R.string.guides_foundation1),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Image(
+                    painter = painterResource(id = R.mipmap.foundation_application),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillHeight,
+                    modifier = Modifier.size(500.dp)
+                )
+                Text(
+                    text = stringResource(R.string.guides_foundation2),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
+
+    }
+}
+
+enum class DetailPane {
+    BRUSHES,
+    EYESHADOW,
+    LIPS,
+    CONTOUR_HIGHLIGHT,
+    FOUNDATION
 }

@@ -36,9 +36,6 @@ class GlowGetterViewModel(
     var favoritesUiState by mutableStateOf(FavoritesUiState())
         private set
 
-//    var userUiState by mutableStateOf(UserUiState())
-//        private set
-
     private var productQuery: String = ""
     var videoId: String = ""
 
@@ -55,10 +52,6 @@ class GlowGetterViewModel(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = FavoritesUiState()
         )
-//
-//    private val _userUiState = MutableStateFlow(UserUiState()) // Initial state
-//    val userUiState: StateFlow<UserUiState> = _userUiState.asStateFlow() // Make it immutable
-
 
     private val _username = MutableStateFlow("")
     val username: StateFlow<String> = _username.asStateFlow()
@@ -153,18 +146,6 @@ class GlowGetterViewModel(
             favoritesRepository.removeFavorite(product)
         }
     }
-
-    // User UI state management
-
-//    suspend fun addUserName(username: String) {
-//        _username.value = _username.value.copy(username = username)
-//    }
-
-
-//    fun updateUserUiState(username: String) {
-//        _username.update { it.copy(username = username) } // Update username in existing state
-//    }
-
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

@@ -1,20 +1,25 @@
 package com.example.glowgetter.ui.productinfo
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
@@ -23,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -35,6 +41,7 @@ import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import kotlinx.coroutines.launch
 
 @Composable
 fun ProductScreen(
@@ -76,20 +83,36 @@ fun EyesLipsProductListScreen(
     modifier: Modifier = Modifier,
     uiState: ProductListUiState
 ) {
+    val scrollState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
     Column {
-        LazyColumn {
+        LazyColumn(
+            state = scrollState,
+            modifier = Modifier.weight(1f)
+        ) {
             item {
                 GlowGetterTopAppBar(if(videoId === "bmygzxaV7Hc" || videoId === "WuNTgwaVwZI") stringResource(R.string.lips) else stringResource(R.string.eyes))
             }
             item {
-                Column {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
                     ProductVideoPlayer(videoId, lifecycleOwner)
-                    Text(text = productName)
+                    Text(
+                        text = productName,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
             items(count = 1) {
                 FlowRow(
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth(),
                     maxItemsInEachRow = 4
                 ) {
@@ -99,6 +122,13 @@ fun EyesLipsProductListScreen(
                         onFavoritesClick = onFavoritesClick
                     )
                 }
+            }
+        }
+    }
+    AnimatedVisibility(visible = !scrollState.isScrollingUp(), enter = fadeIn(), exit = fadeOut()) {
+        GoToTop {
+            scope.launch {
+                scrollState.scrollToItem(0)
             }
         }
     }
@@ -122,9 +152,13 @@ fun FaceProductListScreen(
     modifier: Modifier = Modifier,
     viewModel: GlowGetterViewModel
 ) {
+    val scrollState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+
     Column(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = scrollState,
+            modifier = Modifier.weight(1f)
         ) {
             item {
                 GlowGetterTopAppBar(text = stringResource(R.string.face))
@@ -132,18 +166,33 @@ fun FaceProductListScreen(
             if (viewModel.videoId == "c__JPlF5Q7o") {
                 items(1) {
                     FlowRow(
-                        maxItemsInEachRow = 2
+                        horizontalArrangement = Arrangement.Center,
+                        maxItemsInEachRow = 2,
+                        modifier = modifier
+                            .fillMaxWidth()
                     ) {
-                        Button(onClick = onFirstFoundationClick) {
+                        Button(
+                            onClick = onFirstFoundationClick,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Text(text = stringResource(R.string.liquid_foundation))
                         }
-                        Button(onClick = onSecondFoundationClick) {
+                        Button(
+                            onClick = onSecondFoundationClick,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Text(text = stringResource(R.string.bb_cc_cream))
                         }
-                        Button(onClick = onThirdFoundationClick) {
+                        Button(
+                            onClick = onThirdFoundationClick,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Text(text = stringResource(R.string.mineral_foundation))
                         }
-                        Button(onClick = onFourthFoundationClick) {
+                        Button(
+                            onClick = onFourthFoundationClick,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Text(text = stringResource(R.string.powder_foundation))
                         }
                     }
@@ -151,27 +200,46 @@ fun FaceProductListScreen(
             }
             if (viewModel.videoId == "1LBnsgHNAkE") {
                 items(1) {
-                    FlowRow(maxItemsInEachRow = 2) {
-                        Button(onClick = onFirstBlushClick) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.Center,
+                        maxItemsInEachRow = 2,
+                        modifier = modifier
+                            .fillMaxWidth()
+                    ) {
+                        Button(
+                            onClick = onFirstBlushClick,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Text(text = stringResource(R.string.powder_blush))
                         }
-                        Button(onClick = onSecondBlushClick) {
+                        Button(
+                            onClick = onSecondBlushClick,
+                            modifier = Modifier.padding(4.dp)
+                        ) {
                             Text(text = stringResource(R.string.cream_blush))
                         }
                     }
                 }
             }
             item {
-                Column(modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
                     ProductVideoPlayer(videoId, lifecycleOwner)
-                    Text(text = productName)
+                    Text(
+                        text = productName,
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        textAlign = TextAlign.Center
+                        )
                 }
             }
             items(count = 1) {
                 FlowRow(
-                    horizontalArrangement = Arrangement.Start,
+                    horizontalArrangement = Arrangement.SpaceEvenly,
                     modifier = Modifier.fillMaxWidth(),
                     maxItemsInEachRow = 4
                 ) {
@@ -181,6 +249,13 @@ fun FaceProductListScreen(
                         uiState = uiState
                     )
                 }
+            }
+        }
+    }
+    AnimatedVisibility(visible = !scrollState.isScrollingUp(), enter = fadeIn(), exit = fadeOut()) {
+        GoToTop {
+            scope.launch {
+                scrollState.scrollToItem(0)
             }
         }
     }
