@@ -6,6 +6,13 @@ Glow Getter is a web-based makeup finder app designed specifically for beginners
 - Save Favorites: Save your favorite products for quick access later.
 - Makeup Guides and Tutorials: Access a wide range of makeup guides and tutorials to help you master your makeup skills.
 - Glossary: Explore a glossary of makeup terms to expand your beauty knowledge.
+- Responsive Design: The app is adaptive to different screen sizes, ensuring an optimal user experience on both desktop and mobile devices.
+
+![Screenshot 2024-05-17 at 3 53 49 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/3fab5864-bfb1-43d5-b7fc-5864bf022c6d)
+![Screenshot 2024-05-17 at 3 54 06 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/e6458061-3f4f-459a-a9c5-ffa8dac2076e)
+![Screenshot 2024-05-17 at 3 56 09 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/69c897d0-e27c-4c53-95ab-4ab5085bdeeb)
+![Screenshot 2024-05-17 at 3 57 34 PM](https://github.com/courtlyncodes/glowgetter/assets/146135600/3b8769cb-f9e1-4b59-bd28-95c03ff4ba00)
+
 
 ## Installation Instructions
 To begin using Glow Getter, please follow the instructions below:
