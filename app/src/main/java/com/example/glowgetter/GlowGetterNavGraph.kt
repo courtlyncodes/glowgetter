@@ -150,7 +150,6 @@ fun GlowGetterNavHost(
                     }
                     viewModel.updateFavoritesUiState(favoritesList.favorites)
                 },
-                viewModel = viewModel,
                 uiState = viewModel.productListUiState
             )
         }

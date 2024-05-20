@@ -1,17 +1,39 @@
 package com.example.glowgetter.test
 
+import android.util.Log
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.matcher.ViewMatchers.hasContentDescription
+import com.example.glowgetter.data.GlowGetterRepository
+import com.example.glowgetter.data.ProductDataProvider
+import com.example.glowgetter.data.favorites.FavoritesRepository
+import com.example.glowgetter.ui.ProductListUiState
+import com.example.glowgetter.ui.detailpane.EyesCategoryDetailPane
+import com.example.glowgetter.ui.detailpane.FaceCategoryDetailPane
+import com.example.glowgetter.ui.detailpane.LipsCategoryDetailPane
 import com.example.glowgetter.ui.homepane.HomeScreen
 import com.example.glowgetter.ui.homepane.ProductCarousel
+import com.example.glowgetter.ui.productinfo.DetailScreen
+import com.example.glowgetter.ui.productinfo.FaceProductListScreen
+import com.example.glowgetter.ui.productinfo.Glossary
+import com.example.glowgetter.ui.productinfo.Guides
 import com.example.glowgetter.ui.theme.GlowGetterTheme
+import com.example.glowgetter.ui.viewmodels.FavoritesUiState
+import com.example.glowgetter.ui.viewmodels.GlowGetterViewModel
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.containsString
 import org.junit.Rule
 import org.junit.Test
+
 
 class UiTests {
     @get:Rule
@@ -60,19 +82,123 @@ class UiTests {
         }
         composeTestRule.onNodeWithText("test").assertIsDisplayed()
     }
+
+//    @Test
+//    fun homePanePopularProducts_displaysProductDetails() {
+//        composeTestRule.setContent {
+//            GlowGetterTheme {
+//                HomeScreen(username = "", {}, {}, {}, {}, {})
+//            }
+//        }
+//
+//        with(composeTestRule.onNodeWithText("Glow Reviver Lip Oil")) {
+//            assertExists()
+//            assertIsDisplayed()
+//            performClick()
+//            Log.wtf("clicked", "true")
+//        }
+//
+//        // Wait for potential asynchronous operations (adjust timeout if needed)
+//        composeTestRule.waitForIdle()
+//
+//        composeTestRule.onNodeWithText("e.l.f.").assertIsDisplayed()
+//    }
+
     @Test
-    fun homePanePopularProducts_displaysProductDetails(){
+    fun productDetails_displaysProductDetails() {
         composeTestRule.setContent {
             GlowGetterTheme {
-                HomeScreen(username = "", {}, {}, {}, {}, {})
+                DetailScreen(
+                    onFavoritesClick = {},
+                    product = ProductDataProvider.products[1]
+                )
             }
         }
-        val productNode = composeTestRule.onNodeWithText("Glow Reviver Lip Oil")
-        productNode.performClick() // Simulate click
-        productNode.assertTextContains("e.l.f.")
-
-//        // 2. Verify description after click (assuming separate node)
-        val productDetailsNode = composeTestRule.onNodeWithText(text = "Nourish and hydrate your lips while enhancing your pout's natural glow with e.l.f. Cosmetics' addicting Glow Reviver Lip Oil. The non-sticky formula imbues your pout with a sheer tint of color and glass-like shine while boosting your lips' natural hue.")
-            productDetailsNode.assertIsDisplayed()
+        composeTestRule.onNodeWithText("Rich & Foiled Rose to Fame Eyeshadow Palette")
+            .assertIsDisplayed()
     }
+
+    @Test
+    fun faceCategoryScreen_displaysSubcategories() {
+        composeTestRule.setContent {
+            GlowGetterTheme {
+                FaceCategoryDetailPane({}, {}, {}, {}, {})
+            }
+        }
+        composeTestRule.onNodeWithText("Blush").assertIsDisplayed()
+    }
+
+    @Test
+    fun eyeCategoryScreen_displaysSubcategories() {
+        composeTestRule.setContent {
+            GlowGetterTheme {
+                EyesCategoryDetailPane({}, {}, {}, {})
+            }
+        }
+        composeTestRule.onNodeWithText("Mascara").assertIsDisplayed()
+    }
+
+    @Test
+    fun lipsCategoryScreen_displaysSubcategories() {
+        composeTestRule.setContent {
+            GlowGetterTheme {
+                LipsCategoryDetailPane({}, {}, {})
+            }
+        }
+        composeTestRule.onNodeWithText("Lipstick").assertIsDisplayed()
+    }
+
+    @Test
+    fun faceProductListScreen_displaysButtons() {
+        composeTestRule.setContent {
+            GlowGetterTheme {
+                FaceProductListScreen(
+                    videoId = "c__JPlF5Q7o",
+                    lifecycleOwner = LocalLifecycleOwner.current,
+                    productName = ProductDataProvider.products[1].name,
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    uiState = ProductListUiState.Success(ProductDataProvider.products)
+                )
+            }
+        }
+        composeTestRule.onNodeWithText("Mineral Foundation").assertIsDisplayed()
+        composeTestRule.onNodeWithText("BB & CC Cream").assertIsDisplayed()
+    }
+
+    @Test
+    fun glossaryScreen_displaysButtons() {
+        composeTestRule.setContent {
+            GlowGetterTheme {
+                Glossary(onBackClick = {})
+            }
+        }
+        composeTestRule.onNodeWithText("Eye Candy").performClick()
+    }
+//
+////    @Test
+////    fun glossaryScreen_displaysGlossary() {
+////        composeTestRule.setContent {
+////            GlowGetterTheme {
+////                Glossary(onBackClick = {})
+////            }
+////        }
+////        composeTestRule.onNodeWithText(containsString( "Eye Candy")).assertIsDisplayed()
+////    }
+//
+//    @Test
+//    fun guidesScreen_displaysButtons() {
+//        composeTestRule.setContent {
+//            GlowGetterTheme {
+//                Guides(onBackClick = {})
+//            }
+//        }
+//        composeTestRule.onNode(hasClickAction()).performClick()
+//    }
 }

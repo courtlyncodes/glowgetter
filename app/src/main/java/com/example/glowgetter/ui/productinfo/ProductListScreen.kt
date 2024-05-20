@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -150,8 +151,7 @@ fun FaceProductListScreen(
     onProductClick: (Product) -> Unit,
     onFavoritesClick: (Product) -> Unit,
     uiState: ProductListUiState,
-    modifier: Modifier = Modifier,
-    viewModel: GlowGetterViewModel
+    modifier: Modifier = Modifier
 ) {
     val scrollState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -164,7 +164,7 @@ fun FaceProductListScreen(
             item {
                 GlowGetterTopAppBar(text = stringResource(R.string.face))
             }
-            if (viewModel.videoId == "c__JPlF5Q7o") {
+            if (videoId == "c__JPlF5Q7o") {
                 items(1) {
                     FlowRow(
                         horizontalArrangement = Arrangement.Center,
@@ -199,7 +199,7 @@ fun FaceProductListScreen(
                     }
                 }
             }
-            if (viewModel.videoId == "1LBnsgHNAkE") {
+            if (videoId == "1LBnsgHNAkE") {
                 items(1) {
                     FlowRow(
                         horizontalArrangement = Arrangement.Center,

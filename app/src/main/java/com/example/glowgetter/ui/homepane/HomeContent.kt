@@ -222,7 +222,6 @@ fun ProductCarousel(
                 .shadow(16.dp)
                 .clip(RoundedCornerShape(4.dp))
         )
-        Log.wtf("content des", photos[page].toString())
     }
 }
 

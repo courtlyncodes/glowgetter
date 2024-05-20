@@ -22,6 +22,7 @@ android {
         }
     }
 
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -96,6 +97,11 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation (libs.kotlinx.coroutines.test)
+    dependencies {
+        // Other dependencies...
+        testImplementation (libs.mockito.core.vversion)
+        testImplementation (libs.mockito.inline.vversion)
+    }
 
 
     androidTestImplementation(libs.androidx.junit)
@@ -108,6 +114,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation (libs.ui.test.junit4)
     androidTestImplementation (libs.androidx.junit.v113)
+
+
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)

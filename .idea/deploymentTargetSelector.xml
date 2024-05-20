@@ -13,19 +13,19 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="homePane_displaysCarousel()">
+      <SelectionState runConfigName="lipsCategoryScreen_displaysSubcategories()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="homePane_displaysPopularProducts()">
+      <SelectionState runConfigName="faceProductListScreen_displaysButtons()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="carousel_displaysPhotos()">
+      <SelectionState runConfigName="glossaryScreen_displaysButtons()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="homePane_displaysUserName()">
+      <SelectionState runConfigName="glossaryScreen_displaysGlossary()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="homePanePopularProducts_displaysProductDetails()">
+      <SelectionState runConfigName="guidesScreen_displaysButtons()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

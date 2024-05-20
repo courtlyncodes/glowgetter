@@ -148,9 +148,11 @@ fun EyesCategoryDetailPane(
             HorizontalDivider(color = colorResource(R.color.gray))
         }
     ) {
-        LazyColumn(modifier = Modifier
-            .padding(paddingValues)
-            .padding(it)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(it)
+        ) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.eyebrow_pencils),
@@ -221,9 +223,11 @@ fun FaceCategoryDetailPane(
         }
     ) {
 
-        LazyColumn(modifier = Modifier
-            .padding(paddingValues)
-            .padding(it)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(it)
+        ) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.foundation),
@@ -300,9 +304,11 @@ fun LipsCategoryDetailPane(
             }
         }
     ) {
-        LazyColumn(modifier = Modifier
-            .padding(paddingValues)
-            .padding(it)) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+                .padding(it)
+        ) {
             item {
                 CategoryDetailCard(
                     productType = stringResource(R.string.lip_gloss),
