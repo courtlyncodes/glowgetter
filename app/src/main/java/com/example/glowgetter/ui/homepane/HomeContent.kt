@@ -1,6 +1,5 @@
 package com.example.glowgetter.ui.homepane
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,7 +47,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.helper.widget.Carousel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -233,9 +231,10 @@ fun ProductCategories(
     modifier: Modifier = Modifier
 ) {
     Row(
-        horizontalArrangement = Arrangement.SpaceAround,
+        horizontalArrangement = Arrangement.SpaceEvenly,
         modifier = modifier
             .padding(8.dp)
+            .fillMaxWidth()
     ) {
         Card(
             colors = CardColors(
@@ -246,7 +245,7 @@ fun ProductCategories(
             ),
             modifier = modifier
                 .clickable { onEyesClick() }
-                .width(125.dp)
+                .weight(1f)
         ) {
             Text(
                 text = stringResource(R.string.eyes),
@@ -257,7 +256,7 @@ fun ProductCategories(
                     .padding(8.dp)
             )
         }
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = modifier.weight(.2f))
         Card(
             colors = CardColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -267,7 +266,7 @@ fun ProductCategories(
             ),
             modifier = modifier
                 .clickable { onFaceClick() }
-                .width(125.dp)
+                .weight(1f)
         ) {
             Text(
                 text = stringResource(R.string.face),
@@ -278,7 +277,7 @@ fun ProductCategories(
                     .padding(8.dp)
             )
         }
-        Spacer(modifier = modifier.weight(1f))
+        Spacer(modifier = modifier.weight(.2f))
         Card(
             colors = CardColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -288,7 +287,7 @@ fun ProductCategories(
             ),
             modifier = modifier
                 .clickable { onLipsClick() }
-                .width(125.dp)
+                .weight(1f)
         ) {
             Text(
                 text = stringResource(R.string.lips),
