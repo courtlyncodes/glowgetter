@@ -97,11 +97,8 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation (libs.kotlinx.coroutines.test)
-    dependencies {
-        // Other dependencies...
-        testImplementation (libs.mockito.core.vversion)
-        testImplementation (libs.mockito.inline.vversion)
-    }
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.inline)
 
 
     androidTestImplementation(libs.androidx.junit)
