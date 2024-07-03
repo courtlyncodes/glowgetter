@@ -26,11 +26,12 @@ jobs:
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O android-sdk-tools.zip
           mkdir -p $HOME/android-sdk
           unzip -q android-sdk-tools.zip -d $HOME/android-sdk
-          # Update path based on unzip output (replace with actual path)
+          # Extract path to cmdline-tools bin directory
+          cmdline_tools_bin=$(find $HOME/android-sdk -path '*/cmdline-tools/bin' -type d)
           export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$HOME/android-sdk/<actual_path_to_cmdline_tools_bin>:$PATH
+          export PATH="$cmdline_tools_bin:$PATH"
           echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "export PATH=$HOME/android-sdk/<actual_path_to_cmdline_tools_bin>:$PATH" >> $GITHUB_ENV
+          echo "export PATH=$cmdline_tools_bin:$PATH" >> $GITHUB_ENV
 
       - name: Accept Android SDK licenses
         run: yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
