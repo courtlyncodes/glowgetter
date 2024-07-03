@@ -21,15 +21,20 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Install required packages for emulator
+      - name: Set up Android SDK
         run: |
-          sudo apt-get update
-          sudo apt-get install -y qemu-kvm bridge-utils
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O android-sdk-tools.zip
+          mkdir -p $HOME/android-sdk
+          unzip -q android-sdk-tools.zip -d $HOME/android-sdk
+          echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "export PATH=$HOME/android-sdk/cmdline-tools/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Accept Android SDK licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
 
       - name: Install Android SDK components
         run: |
-          yes | sdkmanager --licenses
-          sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "system-images;android-30;google_apis;x86_64" "emulator"
+          $ANDROID_HOME/cmdline-tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "system-images;android-30;google_apis;x86_64" "emulator"
 
       - name: Create and start emulator
         run: |
