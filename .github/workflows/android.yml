@@ -24,7 +24,35 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Install Android SDK
+      run: sudo apt-get update && sudo apt-get install -y android-sdk
+
+    - name: Set up Android SDK
+      uses: android-actions/setup-android@v2
+      with:
+        api-level: 30
+        target: default
+        arch: x86_64
+        profile: 'Android'
+        channel: 3 # Channel for stable emulator images
+
+    - name: Create and start emulator
+      run: |
+        echo "no" | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
+        $ANDROID_HOME/emulator/emulator -avd test -no-window -no-audio -no-boot-anim &
+        adb wait-for-device
+        adb shell input keyevent 82
+
+    - name: Wait for emulator to boot
+      run: |
+        adb wait-for-device
+        adb shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 1; done;'
+
     - name: Run unit tests
       run: ./gradlew test
+
     - name: Run instrumented tests
       run: ./gradlew connectedAndroidTest
+
+    - name: Stop the emulator
+      run: adb -s emulator-5554 emu kill
