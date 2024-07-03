@@ -20,8 +20,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: gradle
-      - name: Accept Android SDK licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
+
       - name: Set up Android SDK
         run: |
           wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O android-sdk-tools.zip
@@ -34,6 +33,11 @@ jobs:
           echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
           echo "export PATH=$cmdline_tools_bin:$PATH" >> $GITHUB_ENV
 
+      - name: Accept Android SDK licenses
+        run: |
+          export ANDROID_HOME=$HOME/android-sdk
+          export PATH=$HOME/android-sdk/$(find $HOME/android-sdk -path '*/cmdline-tools/bin' -type d):$PATH
+          yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
      
 
       - name: Install Android SDK components
