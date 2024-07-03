@@ -21,23 +21,22 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Set up Android SDK
+      - name: Set up Android SDK (manual)
         run: |
-          wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O android-sdk-tools.zip
-          mkdir -p $HOME/android-sdk
-          unzip -q android-sdk-tools.zip -d $HOME/android-sdk
-          # Extract path to cmdline-tools bin directory
-          cmdline_tools_bin=$(find $HOME/android-sdk -path '*/cmdline-tools/bin' -type d)
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH="$cmdline_tools_bin:$PATH"
-          echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "export PATH=$cmdline_tools_bin:$PATH" >> $GITHUB_ENV
+            mkdir -p $HOME/android-sdk/cmdline-tools/latest
+            mv $HOME/android-sdk/tools/bin/* $HOME/android-sdk/cmdline-tools/latest/
+
+      - name: Set environment variables
+        run: |
+                export ANDROID_HOME=$HOME/android-sdk
+                export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH
+                echo "export ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+                echo "export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $GITHUB_ENV
 
       - name: Accept Android SDK licenses
-        run: |
-          export ANDROID_HOME=$HOME/android-sdk
-          export PATH=$HOME/android-sdk/$(find $HOME/android-sdk -path '*/cmdline-tools/bin' -type d):$PATH
-          yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager --licenses
+        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+
+          # Rest of your existing steps...
      
 
       - name: Install Android SDK components
