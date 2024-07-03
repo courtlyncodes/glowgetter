@@ -23,24 +23,26 @@ jobs:
 
       - name: Set up Android SDK
         run: |
-          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O cmdline-tools.zip
           mkdir -p $HOME/android-sdk/cmdline-tools
-          unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
-          rm cmdline-tools.zip
-
+          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O $HOME/android-sdk/cmdline-tools/cmdline-tools.zip
+          unzip -q $HOME/android-sdk/cmdline-tools/cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
+          rm $HOME/android-sdk/cmdline-tools/cmdline-tools.zip
+          mv $HOME/android-sdk/cmdline-tools/cmdline-tools $HOME/android-sdk/cmdline-tools/latest
+          echo "export PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$PATH" >> $HOME/.bashrc
+          source $HOME/.bashrc
           mkdir -p $HOME/.android
           touch $HOME/.android/repositories.cfg
 
       - name: Accept Android SDK licenses
-        run: yes | $HOME/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses
+        run: yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
       - name: Install Android SDK components
         run: |
-          yes | $HOME/android-sdk/cmdline-tools/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "system-images;android-30;google_apis;x86_64" "emulator"
+          yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "system-images;android-30;google_apis;x86_64" "emulator"
 
       - name: Create and start emulator
         run: |
-          echo "no" | $HOME/android-sdk/cmdline-tools/tools/bin/avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
+          echo "no" | $HOME/android-sdk/cmdline-tools/latest/bin/avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
           $HOME/android-sdk/emulator/emulator -avd test -no-window -no-audio -no-boot-anim &
           adb wait-for-device
           adb shell input keyevent 82
@@ -52,6 +54,12 @@ jobs:
 
       - name: Run unit tests
         run: ./gradlew test
+
+      - name: Run instrumented tests
+        run: ./gradlew connectedAndroidTest
+
+      - name: Stop the emulator
+        run: adb -s emulator-5554 emu kill
 
       - name: Run instrumented tests
         run: ./gradlew connectedAndroidTest
