@@ -14,31 +14,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up JDK 17 (optional)
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: gradle  # Cache gradle downloads (optional)
+          cache: gradle
 
       - name: Set up Android SDK
-        uses: actions/setup-android-sdk@v3
-        with:
-          # List of required SDK components
-          sdk-components: platform-tools, build-tools, tools, emulator, system-images;android-30;google_apis;x86_64
+        run: |
+          wget https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O cmdline-tools.zip
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          unzip -q cmdline-tools.zip -d $HOME/android-sdk/cmdline-tools
+          rm cmdline-tools.zip
 
-          # Optional: Cache downloaded components for faster builds
-          cache: 'android-sdk'
+          mkdir -p $HOME/.android
+          touch $HOME/.android/repositories.cfg
 
-      - name: Print ANDROID_HOME and PATH (optional, for troubleshooting)
-        run: echo $ANDROID_HOME && echo $PATH
+      - name: Accept Android SDK licenses
+        run: yes | $HOME/android-sdk/cmdline-tools/tools/bin/sdkmanager --licenses
 
-      # Rest of your existing workflow steps...
+      - name: Install Android SDK components
+        run: |
+          yes | $HOME/android-sdk/cmdline-tools/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "system-images;android-30;google_apis;x86_64" "emulator"
 
       - name: Create and start emulator
         run: |
-          echo "no" | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
-          $ANDROID_HOME/emulator/emulator -avd test -no-window -no-audio -no-boot-anim &
+          echo "no" | $HOME/android-sdk/cmdline-tools/tools/bin/avdmanager create avd -n test -k "system-images;android-30;google_apis;x86_64" --force
+          $HOME/android-sdk/emulator/emulator -avd test -no-window -no-audio -no-boot-anim &
           adb wait-for-device
           adb shell input keyevent 82
 
